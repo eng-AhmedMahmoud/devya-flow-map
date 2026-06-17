@@ -15,7 +15,7 @@ flowchart LR
     direction TB
     DASH["Admin Dashboard<br/>admin.devya-solutions.com"]
     SITE["Marketing Site<br/>www.devya.dev"]
-    BOOK["Booking App<br/>book.devya-solutions.com"]
+    BOOK["Booking App<br/>booking.devya-solutions.com"]
   end
 
   subgraph Platform[" "]
@@ -96,7 +96,7 @@ sequenceDiagram
   participant A as Ops Admin
   participant D as Admin Dashboard
 
-  C->>B: 1. Open book.devya-solutions.com
+  C->>B: 1. Open booking.devya-solutions.com
   B->>API: GET /api/calendars
   API-->>B: 3 calendars (marketing, dev, business)
   C->>B: 2. Pick calendar + date

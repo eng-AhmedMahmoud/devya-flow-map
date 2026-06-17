@@ -19,7 +19,7 @@ const APPS = [
   },
   {
     name: 'Booking App',
-    url: 'https://book.devya-solutions.com',
+    url: 'https://booking.devya-solutions.com',
     desc: 'Public 30-min slot picker for marketing / dev / business calls.',
     repo: 'eng-AhmedMahmoud/devya-booking-app',
   },
