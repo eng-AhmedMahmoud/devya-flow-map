@@ -1,6 +1,6 @@
 import { CredentialsCard } from '@/components/credentials-card';
 import { SystemMap, MarketingFlow, BookingFlow } from '@/components/system-map';
-import { Globe, Lock, Database, Image as ImageIcon, ExternalLink } from 'lucide-react';
+import { Globe, Lock, Database, Image as ImageIcon, ExternalLink, FileSignature } from 'lucide-react';
 
 export const dynamic = 'force-static';
 
@@ -29,6 +29,12 @@ const APPS = [
     desc: 'NestJS + Prisma. Docker on Hostinger VPS 72.61.81.59 behind nginx + certbot.',
     repo: 'eng-AhmedMahmoud/devya-backend',
   },
+  {
+    name: 'Contracts App',
+    url: 'https://contracts.devya-solutions.com',
+    desc: 'Internal contract generator — pick a template, fill fields, export PDF/.docx. Bilingual AR/EN. No backend.',
+    repo: 'eng-AhmedMahmoud/devya-contracts',
+  },
 ];
 
 const ROLES = [
@@ -54,6 +60,17 @@ const ROLES = [
       'Rotate credentials via SEED_ADMIN_PASSWORD on VPS',
     ],
   },
+  {
+    icon: FileSignature,
+    title: 'Sales / Ops (Contracts)',
+    duties: [
+      'Open contracts.devya-solutions.com from admin sidebar',
+      'Pick template: Consultancy or Project',
+      'Fill client + scope + payment fields',
+      'Toggle Arabic ↔ English on the fly',
+      'Export as PDF (print) or .docx and send to client',
+    ],
+  },
 ];
 
 export default function FlowMapPage() {
@@ -67,8 +84,8 @@ export default function FlowMapPage() {
             Devya Solutions — System of Apps
           </h1>
           <p className="text-lg text-ink-300 max-w-3xl">
-            How the marketing site, admin dashboard, booking app, and backend API fit together. Who logs in
-            where, what each app does, and where the data lives.
+            How the marketing site, admin dashboard, booking app, backend API, and contracts app fit together.
+            Who logs in where, what each app does, and where the data lives.
           </p>
         </header>
 
@@ -79,7 +96,7 @@ export default function FlowMapPage() {
 
         {/* App grid */}
         <section className="space-y-5">
-          <h2 className="text-2xl font-semibold text-white">The four apps</h2>
+          <h2 className="text-2xl font-semibold text-white">The apps</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {APPS.map((a) => (
               <a

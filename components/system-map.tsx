@@ -7,6 +7,7 @@ flowchart LR
     direction TB
     M[Marketing Team]
     A[Ops Admin]
+    S[Sales / Ops]
     C[Website Visitor]
     B[Booking Customer]
   end
@@ -16,6 +17,7 @@ flowchart LR
     DASH["Admin Dashboard<br/>admin.devya-solutions.com"]
     SITE["Marketing Site<br/>www.devya.dev"]
     BOOK["Booking App<br/>booking.devya-solutions.com"]
+    CON["Contracts App<br/>contracts.devya-solutions.com"]
   end
 
   subgraph Platform[" "]
@@ -27,12 +29,15 @@ flowchart LR
 
   M -- "CMS edits" --> DASH
   A -- "Bookings" --> DASH
+  S -- "Generate contracts" --> CON
+  DASH -- "Sidebar link" --> CON
   C -- "Reads pages" --> SITE
   B -- "Book a slot" --> BOOK
 
   DASH -- "JWT cookie<br/>/api/admin/*" --> API
   SITE -. "ISR 60s<br/>/api/public/*" .-> API
   BOOK -- "/api/calendars<br/>/api/bookings" --> API
+  CON -. "Stateless<br/>PDF / DOCX export" .-> CON
 
   API <--> DB
   DASH -- "Upload" --> API
@@ -44,8 +49,8 @@ flowchart LR
   classDef plat fill:#0f1f1a,stroke:#10b981,color:#a7f3d0
   classDef store fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff
 
-  class M,A,C,B user
-  class DASH,SITE,BOOK app
+  class M,A,S,C,B user
+  class DASH,SITE,BOOK,CON app
   class API plat
   class DB,CF store
 `;
