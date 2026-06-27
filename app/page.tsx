@@ -35,6 +35,12 @@ const APPS = [
     desc: 'Internal contract generator — pick a template, fill fields, export PDF/.docx. Bilingual AR/EN. No backend.',
     repo: 'eng-AhmedMahmoud/devya-contracts',
   },
+  {
+    name: 'Tasks App',
+    url: 'https://tasks.devya-solutions.com',
+    desc: 'Eisenhower task management for Muhammed + Moaz. JWT cookie auth. Bookings linkage for Meeting tasks. Cron-driven Gmail reminders. Monthly per-employee assessment.',
+    repo: 'eng-AhmedMahmoud/devya-tasks-app',
+  },
 ];
 
 const ROLES = [
