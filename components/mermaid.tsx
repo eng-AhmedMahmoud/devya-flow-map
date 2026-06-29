@@ -5,9 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 interface Props {
   chart: string;
   id: string;
+  /** Pixel font-size applied to every label. Default 18. */
+  fontSize?: number;
 }
 
-export function Mermaid({ chart, id }: Props) {
+export function Mermaid({ chart, id, fontSize = 18 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>('');
   const [err, setErr] = useState<string | null>(null);
@@ -21,19 +23,32 @@ export function Mermaid({ chart, id }: Props) {
           startOnLoad: false,
           theme: 'dark',
           fontFamily: 'Sora, system-ui, sans-serif',
+          flowchart: { htmlLabels: true, useMaxWidth: true, curve: 'basis' },
+          sequence: {
+            actorFontSize: fontSize,
+            noteFontSize: fontSize - 2,
+            messageFontSize: fontSize - 2,
+            wrap: true,
+            mirrorActors: false,
+          },
           themeVariables: {
             background: '#0a0a0a',
-            primaryColor: '#1c1c1c',
-            primaryTextColor: '#e5e5e5',
+            primaryColor: '#161616',
+            primaryTextColor: '#f5f5f5',
             primaryBorderColor: '#3a3a3a',
-            lineColor: '#6b6b6b',
+            lineColor: '#9a9a9a',
             secondaryColor: '#121212',
-            tertiaryColor: '#1c1c1c',
-            mainBkg: '#1c1c1c',
+            tertiaryColor: '#161616',
+            mainBkg: '#161616',
             nodeBorder: '#3a3a3a',
-            clusterBkg: 'rgba(255,255,255,0.02)',
-            clusterBorder: 'rgba(255,255,255,0.10)',
-            edgeLabelBackground: '#121212',
+            clusterBkg: 'rgba(255,255,255,0.03)',
+            clusterBorder: 'rgba(255,255,255,0.18)',
+            edgeLabelBackground: '#0a0a0a',
+            fontSize: `${fontSize}px`,
+            labelFontSize: `${fontSize}px`,
+            actorFontSize: `${fontSize}px`,
+            noteFontSize: `${fontSize}px`,
+            messageFontSize: `${fontSize}px`,
           },
         });
         const { svg } = await mermaid.render(`m-${id}`, chart);
@@ -45,11 +60,18 @@ export function Mermaid({ chart, id }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [chart, id]);
+  }, [chart, id, fontSize]);
 
   if (err) {
     return <pre className="text-rose-300 text-xs whitespace-pre-wrap p-4">{err}</pre>;
   }
 
-  return <div ref={ref} className="mermaid w-full" dangerouslySetInnerHTML={{ __html: svg }} />;
+  return (
+    <div
+      ref={ref}
+      className="mermaid w-full"
+      style={{ fontSize: `${fontSize}px` }}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
 }

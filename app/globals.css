@@ -1,42 +1,150 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Larger base for non-technical readers. */
+  font-size: 17px;
+}
+
 body {
   background: #0a0a0a;
-  color: #e5e5e5;
+  color: #f5f5f5;
   font-family: 'Sora', system-ui, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
 .surface {
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 18px;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 300ms ease;
 }
 
 .surface-strong {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 300ms ease;
+}
+
+/* Hover lifts the card a hair and adds a soft outer glow.
+   Highlighting that scans without thinking — exactly what
+   business readers want. */
+.surface-strong:hover,
+.surface:hover {
+  border-color: rgba(255, 255, 255, 0.30);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Animated border for things we want the eye to land on first
+   (the "where am I in the flow" anchor on each section).
+   Subtle conic-gradient sweep, ~7s loop. */
+.card-anchor {
+  position: relative;
+  isolation: isolate;
+}
+.card-anchor::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    rgba(52, 211, 153, 0.65),
+    rgba(96, 165, 250, 0.65),
+    rgba(168, 85, 247, 0.65),
+    rgba(251, 191, 36, 0.65),
+    rgba(52, 211, 153, 0.65)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-spin 7s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes border-spin {
+  to { --angle: 360deg; }
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  padding: 4px 10px;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #9a9a9a;
+  color: #c0c0c0;
 }
+
+/* Status pill component — used by the legend + standalone elements.
+   Same colour vocabulary as the diagrams. */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.status-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  box-shadow: 0 0 12px currentColor;
+  animation: dot-pulse 2.2s ease-in-out infinite;
+}
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.25); }
+}
+
+.status-pending  { color: #fde68a; border-color: rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.10); }
+.status-active   { color: #bbf7d0; border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.10); }
+.status-client   { color: #dbeafe; border-color: rgba(96, 165, 250, 0.4); background: rgba(96, 165, 250, 0.10); }
+.status-admin    { color: #e9d5ff; border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.10); }
+.status-danger   { color: #fecaca; border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.10); }
 
 /* Mermaid styling overrides */
 .mermaid svg {
   max-width: 100%;
   height: auto;
+  font-size: inherit;
+}
+.mermaid .nodeLabel,
+.mermaid .edgeLabel,
+.mermaid text {
+  font-size: 1em !important;
+  font-family: 'Sora', system-ui, sans-serif !important;
+}
+
+/* Mermaid node hover: gentle lift + glow ring */
+.mermaid .node {
+  transition: filter 200ms ease, transform 200ms ease;
+  cursor: default;
+}
+.mermaid .node:hover {
+  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.55));
+  transform: translateY(-2px);
+}
+.mermaid .cluster rect {
+  rx: 16px;
+  ry: 16px;
 }
