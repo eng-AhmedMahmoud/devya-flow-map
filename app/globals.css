@@ -135,14 +135,8 @@ body {
   font-family: 'Sora', system-ui, sans-serif !important;
 }
 
-/* Mermaid node hover: gentle lift + glow ring */
 .mermaid .node {
-  transition: filter 200ms ease, transform 200ms ease;
   cursor: default;
-}
-.mermaid .node:hover {
-  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.55));
-  transform: translateY(-2px);
 }
 .mermaid .cluster rect {
   rx: 16px;
