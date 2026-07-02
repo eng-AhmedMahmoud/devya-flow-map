@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { Copy, Check, ExternalLink } from 'lucide-react';
 
-const ADMIN_EMAIL = 'admin@devya-solutions.com';
-const ADMIN_PASSWORD = '5BBQvTAr94BDNDZsH2eE';
+// Demo credentials are injected at build time via env vars.
+// Never hardcode real credentials here — this file is committed to git.
+const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL;
+const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
 const ADMIN_URL = 'https://admin.devya-solutions.com';
 
 function CopyButton({ value, label }: { value: string; label: string }) {
@@ -26,6 +28,9 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 }
 
 export function CredentialsCard() {
+  // Render nothing unless demo credentials are explicitly provided via env.
+  if (!DEMO_EMAIL || !DEMO_PASSWORD) return null;
+
   return (
     <div className="surface-strong p-6">
       <div className="flex items-start justify-between gap-4 mb-5">
@@ -46,8 +51,8 @@ export function CredentialsCard() {
 
       <dl className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <Field label="URL" value={ADMIN_URL} />
-        <Field label="Email" value={ADMIN_EMAIL} />
-        <Field label="Password" value={ADMIN_PASSWORD} mono />
+        <Field label="Email" value={DEMO_EMAIL} />
+        <Field label="Password" value={DEMO_PASSWORD} mono />
         <Field label="Local dev" value="https://admin.localhost" hint="Behind portless; same creds." />
       </dl>
 

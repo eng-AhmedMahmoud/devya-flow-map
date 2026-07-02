@@ -5,6 +5,8 @@ import {
   BookingFlow,
   ContractsFlow,
   EndToEndFlow,
+  SalesFlow,
+  FeedbackFlow,
 } from '@/components/system-map';
 import {
   Globe,
@@ -17,6 +19,10 @@ import {
   CheckSquare,
   Mail,
   Users,
+  BarChart3,
+  Star,
+  Send,
+  Calculator,
 } from 'lucide-react';
 
 export const dynamic = 'force-static';
@@ -44,6 +50,20 @@ const APPS = [
     icon: CheckSquare,
   },
   {
+    name: 'Sales App',
+    url: 'https://sales.devya-solutions.com',
+    desc: 'Arabic-first pipeline. Reps run leads, log activity, schedule meetings, close deals.',
+    role: 'Where sales reps work leads',
+    icon: BarChart3,
+  },
+  {
+    name: 'Quote App',
+    url: 'https://quote.devya-solutions.com',
+    desc: 'Clients build a quote from services and see a live invoice, then convert it into a contract.',
+    role: 'Where quotes become contracts',
+    icon: Calculator,
+  },
+  {
     name: 'Contracts App',
     url: 'https://contracts.devya-solutions.com',
     desc: 'Generate a contract from a template, send by email, client signs in browser.',
@@ -51,9 +71,23 @@ const APPS = [
     icon: FileSignature,
   },
   {
+    name: 'Feedback App',
+    url: 'https://feedback.devya-solutions.com',
+    desc: 'After delivery, sends a review request. Happy clients go to Google/Clutch; unhappy ones leave private feedback first.',
+    role: 'Where reviews are collected',
+    icon: Star,
+  },
+  {
+    name: 'Mailer App',
+    url: 'https://mailer.devya-solutions.com',
+    desc: 'Internal outbound-email composer that sends branded messages from the company mailbox. Its own login and SMTP — standalone.',
+    role: 'Where the team sends email',
+    icon: Send,
+  },
+  {
     name: 'Admin Dashboard',
     url: 'https://admin.devya-solutions.com',
-    desc: 'Edit the marketing site. Watch every booking + contract from one screen.',
+    desc: 'Edit the marketing site, watch every booking + contract, and manage users, roles & access.',
     role: 'Where ops oversees everything',
     icon: Lock,
   },
@@ -159,8 +193,9 @@ export default function FlowMapPage() {
           <div>
             <h2 className="text-3xl font-semibold text-white">The big picture</h2>
             <p className="mt-2 text-lg text-zinc-300">
-              Four departments. Five apps. One shared database keeps every screen on the
-              same truth in real time.
+              Four teams. Nine apps — marketing, booking, sales, quote, tasks, contracts,
+              feedback, mailer, and the admin dashboard. One shared database keeps every screen
+              on the same truth in real time (the mailer is the one standalone tool).
             </p>
           </div>
           <div className="surface-strong p-6 md:p-10 overflow-x-auto">
@@ -260,6 +295,39 @@ export default function FlowMapPage() {
           </div>
         </section>
 
+        {/* Sales flow */}
+        <section className="space-y-5">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-7 w-7 text-emerald-300" />
+            <h2 className="text-3xl font-semibold text-white">Sales pipeline flow</h2>
+          </div>
+          <p className="text-lg text-zinc-300">
+            Reps track leads through stages, log every touch (WhatsApp / call / meeting), schedule
+            meetings straight into the booking calendar, close won leads with a one-click contract
+            prefill, and lose the rest with a reason.
+          </p>
+          <div className="surface-strong p-6 md:p-10 overflow-x-auto">
+            <SalesFlow />
+          </div>
+        </section>
+
+        {/* Feedback flow */}
+        <section className="space-y-5">
+          <div className="flex items-center gap-3">
+            <Star className="h-7 w-7 text-amber-300" />
+            <h2 className="text-3xl font-semibold text-white">Feedback & reviews flow</h2>
+          </div>
+          <p className="text-lg text-zinc-300">
+            After a project ships, the Feedback app emails the client a one-tap rating. Happy
+            clients (4–5★) are sent straight to a public platform (Google / Clutch); unhappy ones
+            (1–3★) leave a private comment the team reads first — so public reviews stay strong and
+            problems get caught early.
+          </p>
+          <div className="surface-strong p-6 md:p-10 overflow-x-auto">
+            <FeedbackFlow />
+          </div>
+        </section>
+
         {/* Contracts flow */}
         <section className="space-y-5">
           <div className="flex items-center gap-3">
@@ -327,6 +395,24 @@ export default function FlowMapPage() {
               note="Every contract appears in /contracts with live status (DRAFT → SIGNED) and a signed-PDF download."
               icon={FileSignature}
             />
+            <Relation
+              from="Quote app"
+              to="Contracts app"
+              note="A finished quote converts into a prefilled contract — services, scope and price carry straight over."
+              icon={Calculator}
+            />
+            <Relation
+              from="Won deal"
+              to="Feedback app"
+              note="After delivery, a review request goes out; the rating and any private comment land back with the team."
+              icon={Star}
+            />
+            <Relation
+              from="Mailer app"
+              to="Company mailbox"
+              note="Standalone tool with its own login + SMTP — the team composes and sends branded outbound email; it does not touch the shared database."
+              icon={Send}
+            />
           </div>
         </section>
 
@@ -356,8 +442,9 @@ export default function FlowMapPage() {
                 <h3 className="text-xl font-semibold text-white">One database</h3>
               </div>
               <p className="text-base text-zinc-200">
-                Postgres on the Hostinger VPS holds users, bookings, contracts, tasks, and every CMS
-                entity. Every app reads from this single source of truth, so screens never disagree.
+                Postgres on the Hostinger VPS holds users &amp; roles, bookings, sales leads,
+                contracts, tasks, feedback, and every CMS entity. Every app (except the standalone
+                mailer) reads from this single source of truth, so screens never disagree.
               </p>
             </div>
             <div className="surface-strong p-6">

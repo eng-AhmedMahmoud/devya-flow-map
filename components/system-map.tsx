@@ -1,9 +1,11 @@
 import { Mermaid } from './mermaid';
 
 /**
- * High-level map: which department owns which app, and how the four apps
- * pass information between each other. Tuned for non-technical readers —
- * swimlane per department, plain-language arrow labels.
+ * High-level map: which department owns which app, and how every app
+ * passes information between each other. Tuned for non-technical readers —
+ * swimlane per department, plain-language arrow labels. Covers the full
+ * platform: marketing, booking, sales, quote, tasks, contracts, feedback,
+ * mailer, and the admin dashboard (which now includes user management).
  */
 export function SystemMap() {
   const chart = `
@@ -12,12 +14,15 @@ flowchart LR
     direction TB
     VISITOR[Visits website]
     CL_BOOK[Books a call]
+    CL_QUOTE[Builds a quote]
     CL_PORTAL[Signs contract<br/>by email]
+    CL_REVIEW[Leaves a review<br/>after delivery]
   end
 
   subgraph SALES["💼 SALES"]
     direction TB
     SAL_REVIEW[Reviews booking<br/>requests]
+    SAL_LEADS[Works leads in<br/>Sales pipeline]
     SAL_CONTRACT[Drafts &amp; sends<br/>contract]
   end
 
@@ -25,47 +30,68 @@ flowchart LR
     direction TB
     DEL_MEET[Runs the meeting]
     DEL_TASKS[Tracks work<br/>in Tasks app]
+    DEL_FEED[Requests a review<br/>after delivery]
   end
 
   subgraph ADMIN["🗂 ADMIN / OPS"]
     direction TB
     OPS_CMS[Edits website<br/>content]
-    OPS_BOARD[Watches every<br/>booking &amp; contract]
+    OPS_BOARD[Watches bookings,<br/>contracts &amp; feedback]
+    OPS_USERS[Manages users<br/>&amp; access]
+    OPS_MAIL[Sends outbound<br/>email]
   end
 
   subgraph PLATFORM["⚙️ PLATFORM"]
     direction TB
     SITE["🌐 Marketing site<br/>devya.dev"]
     BOOK["📅 Booking app<br/>booking.devya-solutions.com"]
+    SALES_APP["💼 Sales app<br/>sales.devya-solutions.com"]
+    QUOTE["🧮 Quote app<br/>quote → contract"]
     TASKS["✅ Tasks app<br/>tasks.devya-solutions.com"]
     CON["📝 Contracts app<br/>contracts.devya-solutions.com"]
-    DASH["🗂 Admin dashboard<br/>admin.devya-solutions.com"]
+    FEED["⭐ Feedback app<br/>feedback.devya-solutions.com"]
+    MAILER["✉️ Mailer app<br/>mailer.devya-solutions.com"]
+    DASH["🗂 Admin + Users<br/>admin.devya-solutions.com"]
     DATA[("💾 Shared database<br/>one source of truth")]
   end
 
   VISITOR ==> SITE
   CL_BOOK ==> BOOK
+  CL_QUOTE ==> QUOTE
   CL_PORTAL ==> CON
-  SAL_REVIEW ==> TASKS
+  CL_REVIEW ==> FEED
+  SAL_REVIEW ==> BOOK
+  SAL_LEADS ==> SALES_APP
   SAL_CONTRACT ==> CON
+  SALES_APP ==> BOOK
+  SALES_APP ==> CON
+  SALES_APP ==> TASKS
+  QUOTE ==> CON
   DEL_MEET ==> TASKS
   DEL_TASKS ==> TASKS
+  DEL_FEED ==> FEED
   OPS_CMS ==> DASH
   OPS_BOARD ==> DASH
+  OPS_USERS ==> DASH
+  OPS_MAIL ==> MAILER
 
   SITE -. content -.-> DATA
   BOOK <==> DATA
+  SALES_APP <==> DATA
   TASKS <==> DATA
   CON <==> DATA
+  FEED <==> DATA
   DASH <==> DATA
 
   classDef lane fill:#0d0d0d,stroke:#2a2a2a,color:#f5f5f5,stroke-width:1.5px
   classDef step fill:#1a1a1a,stroke:#3a3a3a,color:#f5f5f5,stroke-width:1.5px,rx:10,ry:10
   classDef app fill:#102018,stroke:#34d399,color:#a7f3d0,stroke-width:2px,rx:12,ry:12
+  classDef mail fill:#231a0a,stroke:#fbbf24,color:#fde68a,stroke-width:2px,rx:12,ry:12
   classDef store fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff,stroke-width:2px
 
-  class VISITOR,CL_BOOK,CL_PORTAL,SAL_REVIEW,SAL_CONTRACT,DEL_MEET,DEL_TASKS,OPS_CMS,OPS_BOARD step
-  class SITE,BOOK,TASKS,CON,DASH app
+  class VISITOR,CL_BOOK,CL_QUOTE,CL_PORTAL,CL_REVIEW,SAL_REVIEW,SAL_LEADS,SAL_CONTRACT,DEL_MEET,DEL_TASKS,DEL_FEED,OPS_CMS,OPS_BOARD,OPS_USERS,OPS_MAIL step
+  class SITE,BOOK,SALES_APP,QUOTE,TASKS,CON,FEED,DASH app
+  class MAILER mail
   class DATA store
 
   linkStyle default stroke:#9a9a9a,stroke-width:1.8px
@@ -251,6 +277,118 @@ flowchart LR
   linkStyle default stroke:#9a9a9a,stroke-width:2px
 `;
   return <Mermaid chart={chart} id="booking-flow" fontSize={19} />;
+}
+
+/**
+ * Sales pipeline flow: rep receives lead, works it through the pipeline,
+ * schedules meetings, then closes won → contract or lost.
+ */
+export function SalesFlow() {
+  const chart = `
+flowchart LR
+  subgraph LEAD_LANE["👤 LEAD"]
+    L1[Lead created<br/>via Sales app]
+    L2[Receives WhatsApp<br/>or phone follow-up]
+    L3{Interested?}
+    L4[Joins meeting]
+    L5[Receives contract<br/>e-sign email]
+  end
+
+  subgraph REP_LANE["💼 SALES REP"]
+    R1[Sees new lead<br/>in pipeline]
+    R2[Logs activity<br/>WhatsApp / call]
+    R3[Moves stage to<br/>QUALIFIED]
+    R4[Schedules meeting]
+    R5{Outcome?}
+    R6[Marks WON]
+    R7[Marks LOST]
+  end
+
+  subgraph SYSTEM_LANE["⚙️ SYSTEM"]
+    Y1[Auto-creates<br/>Booking row]
+    Y2[Deep-link opens<br/>Contracts editor<br/>prefilled]
+    Y3[Cron creates<br/>follow-up task<br/>if stalled]
+  end
+
+  L1 ==> R1 ==> R2 ==> L2
+  L2 ==> L3
+  L3 -- yes --> R3 ==> R4 ==> Y1
+  Y1 -. confirmation .-> L4
+  L4 ==> R5
+  R5 -- won --> R6 ==> Y2 ==> L5
+  R5 -- lost --> R7
+  R1 -.-> Y3
+
+  classDef lead fill:#0f1a2a,stroke:#60a5fa,color:#dbeafe,stroke-width:2px,rx:12,ry:12
+  classDef rep fill:#0f1f1a,stroke:#34d399,color:#bbf7d0,stroke-width:2px,rx:12,ry:12
+  classDef sys fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff,stroke-width:2px,rx:10,ry:10
+  classDef decision fill:#231a0a,stroke:#fbbf24,color:#fde68a,stroke-width:2px
+
+  class L1,L2,L4,L5 lead
+  class R1,R2,R3,R4,R6,R7 rep
+  class Y1,Y2,Y3 sys
+  class L3,R5 decision
+
+  linkStyle default stroke:#9a9a9a,stroke-width:2px
+`;
+  return <Mermaid chart={chart} id="sales-flow" fontSize={19} />;
+}
+
+/**
+ * Feedback / reviews flow: after delivery the team sends a review request;
+ * happy clients (4–5★) are routed to a public platform (Google / Clutch),
+ * unhappy ones (1–3★) leave private feedback the team sees first.
+ */
+export function FeedbackFlow() {
+  const chart = `
+flowchart LR
+  subgraph TEAM_LANE["🛠 DELIVERY / OPS"]
+    T1[Project delivered]
+    T2[Creates feedback<br/>request in app]
+    T3[Sends review email]
+    T8[Reads rating +<br/>private comments]
+  end
+
+  subgraph CLIENT_LANE["👤 CLIENT"]
+    C1[Gets review email]
+    C2[Opens rating link]
+    C3{How was it?}
+    C4[4–5 stars]
+    C5[1–3 stars]
+    C6[Redirected to<br/>Google / Clutch]
+    C7[Leaves private<br/>comment]
+  end
+
+  subgraph SYSTEM_LANE["⚙️ SYSTEM"]
+    Y1[Tracks email open<br/>via beacon pixel]
+    Y2[Stores rating +<br/>platform click]
+    Y3[Auto-reminder<br/>if no response]
+  end
+
+  T1 ==> T2 ==> T3
+  T3 -. email .-> C1
+  C1 ==> C2 ==> C3
+  C3 -- "😀 high" --> C4 ==> C6
+  C3 -- "😐 low" --> C5 ==> C7
+  C6 -.-> Y2
+  C7 -.-> Y2
+  Y2 -.-> T8
+  C1 -.-> Y1
+  T3 -.-> Y3
+
+  classDef team fill:#0f1f1a,stroke:#34d399,color:#bbf7d0,stroke-width:2px,rx:12,ry:12
+  classDef client fill:#0f1a2a,stroke:#60a5fa,color:#dbeafe,stroke-width:2px,rx:12,ry:12
+  classDef sys fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff,stroke-width:2px,rx:10,ry:10
+  classDef decision fill:#231a0a,stroke:#fbbf24,color:#fde68a,stroke-width:2px
+
+  class T1,T2,T3,T8 team
+  class C1,C2,C4,C5,C6,C7 client
+  class Y1,Y2,Y3 sys
+  class C3 decision
+
+  linkStyle default stroke:#9a9a9a,stroke-width:2px
+`;
+  return <Mermaid chart={chart} id="feedback-flow" fontSize={19} />;
 }
 
 /**
