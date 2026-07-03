@@ -160,7 +160,9 @@ body.font-cairo .mermaid text {
 }
 
 .mermaid .node {
-  cursor: default;
+  cursor: pointer;
+  /* Ensure the whole node group catches hover, not just the label/shape. */
+  pointer-events: bounding-box;
 }
 .mermaid .cluster rect {
   rx: 16px;
@@ -171,22 +173,25 @@ body.font-cairo .mermaid text {
    Toggled by mermaid.tsx via `.has-hover` on the wrapper + `.edge-hi`,
    `.node-hi`, `.node-dim` on individual elements. */
 .mermaid path.flowchart-link,
+.mermaid g.edgePaths path,
 .mermaid g.edgeLabel,
 .mermaid g.node {
   transition: opacity 160ms ease, stroke 160ms ease,
               stroke-width 160ms ease, filter 160ms ease;
 }
-.mermaid.has-hover path.flowchart-link {
+.mermaid.has-hover path.flowchart-link,
+.mermaid.has-hover g.edgePaths path {
   opacity: 0.12;
 }
 .mermaid.has-hover g.edgeLabel {
   opacity: 0.15;
 }
-.mermaid.has-hover path.flowchart-link.edge-hi {
+.mermaid.has-hover path.flowchart-link.edge-hi,
+.mermaid.has-hover g.edgePaths path.edge-hi {
   opacity: 1;
   stroke: #34d399 !important;
-  stroke-width: 3.4px !important;
-  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.55));
+  stroke-width: 3.6px !important;
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.7));
 }
 .mermaid.has-hover g.edgeLabel.edge-hi {
   opacity: 1;
@@ -195,5 +200,5 @@ body.font-cairo .mermaid text {
   opacity: 0.35;
 }
 .mermaid.has-hover g.node.node-hi {
-  filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.45));
+  filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.55));
 }

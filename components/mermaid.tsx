@@ -10,10 +10,74 @@ interface Props {
 }
 
 const NODE_ID_RE = /^flowchart-(.+)-\d+$/;
+// Mermaid 11 edge id: `L_<src>_<dst>_<n>`. Names may contain '_' (e.g. SALES_APP),
+// so we can't parse by regex alone — we split against a known set of node names.
+const EDGE_ID_RE = /^L_(.+)_(\d+)$/;
 
 function getNodeName(el: Element): string {
   const m = el.id.match(NODE_ID_RE);
-  return m?.[1] ?? '';
+  if (m) return m[1];
+  const dataId = (el as SVGElement).getAttribute('data-id');
+  return dataId ?? '';
+}
+
+function parseEdgeId(raw: string, names: Set<string>): { src: string; dst: string } {
+  const m = raw.match(EDGE_ID_RE);
+  if (!m) return { src: '', dst: '' };
+  const body = m[1];
+  // Find the split point where both halves are valid node names.
+  for (let i = 1; i < body.length - 1; i++) {
+    if (body[i] !== '_') continue;
+    const left = body.slice(0, i);
+    const right = body.slice(i + 1);
+    if (names.has(left) && names.has(right)) return { src: left, dst: right };
+  }
+  // Fallback: longest left match against known names.
+  let bestSrc = '';
+  let bestDst = '';
+  for (const n of names) {
+    if (body.startsWith(n + '_') && n.length > bestSrc.length) {
+      const rest = body.slice(n.length + 1);
+      bestSrc = n;
+      bestDst = rest;
+    }
+  }
+  return { src: bestSrc, dst: bestDst };
+}
+
+function extractEdgeId(el: Element): string {
+  const dataId = el.getAttribute('data-id');
+  if (dataId) return dataId;
+  const rawId = el.id || '';
+  const lastL = rawId.lastIndexOf('L_');
+  return lastL >= 0 ? rawId.slice(lastL) : '';
+}
+
+function getEdgeEndpoints(el: Element, names: Set<string>): { src: string; dst: string } {
+  let src = '';
+  let dst = '';
+  el.classList.forEach((c) => {
+    if (c.startsWith('LS-')) src = c.slice(3);
+    else if (c.startsWith('LE-')) dst = c.slice(3);
+  });
+  if (src && dst) return { src, dst };
+  const raw = extractEdgeId(el);
+  if (raw) return parseEdgeId(raw, names);
+  return {
+    src: el.getAttribute('data-edge-source') || el.getAttribute('data-source') || '',
+    dst: el.getAttribute('data-edge-target') || el.getAttribute('data-target') || '',
+  };
+}
+
+function getLabelEndpoints(el: Element, names: Set<string>): { src: string; dst: string } {
+  const direct = getEdgeEndpoints(el, names);
+  if (direct.src && direct.dst) return direct;
+  const inner = el.querySelector('[data-id]');
+  if (inner) {
+    const dataId = inner.getAttribute('data-id') ?? '';
+    return parseEdgeId(dataId, names);
+  }
+  return { src: '', dst: '' };
 }
 
 export function Mermaid({ chart, id, fontSize = 18 }: Props) {
@@ -79,18 +143,22 @@ export function Mermaid({ chart, id, fontSize = 18 }: Props) {
     if (!svgEl) return;
 
     const nodes = Array.from(svgEl.querySelectorAll<SVGGElement>('g.node'));
-    const edges = Array.from(svgEl.querySelectorAll<SVGPathElement>('path.flowchart-link'));
+    const nodeNames = new Set<string>();
+    for (const n of nodes) {
+      const name = getNodeName(n);
+      if (name) nodeNames.add(name);
+    }
+
+    let edges = Array.from(svgEl.querySelectorAll<SVGPathElement>('path.flowchart-link'));
+    if (edges.length === 0) {
+      edges = Array.from(
+        svgEl.querySelectorAll<SVGPathElement>('g.edgePaths path, g.edgePath path'),
+      );
+    }
     const edgeLabels = Array.from(svgEl.querySelectorAll<SVGGElement>('g.edgeLabel'));
 
-    const edgeMeta = edges.map((e) => {
-      let src = '';
-      let dst = '';
-      e.classList.forEach((c) => {
-        if (c.startsWith('LS-')) src = c.slice(3);
-        else if (c.startsWith('LE-')) dst = c.slice(3);
-      });
-      return { el: e, src, dst };
-    });
+    const edgeMeta = edges.map((e) => ({ el: e, ...getEdgeEndpoints(e, nodeNames) }));
+    const labelMeta = edgeLabels.map((l) => ({ el: l, ...getLabelEndpoints(l, nodeNames) }));
 
     // Neighbours per node (union of all edges' endpoints touching this node).
     const neighbours = new Map<string, Set<string>>();
@@ -117,14 +185,8 @@ export function Mermaid({ chart, id, fontSize = 18 }: Props) {
         const hit = src === name || dst === name;
         el.classList.toggle('edge-hi', hit);
       }
-      for (const l of edgeLabels) {
-        let src = '';
-        let dst = '';
-        l.classList.forEach((c) => {
-          if (c.startsWith('LS-')) src = c.slice(3);
-          else if (c.startsWith('LE-')) dst = c.slice(3);
-        });
-        l.classList.toggle('edge-hi', src === name || dst === name);
+      for (const { el, src, dst } of labelMeta) {
+        el.classList.toggle('edge-hi', src === name || dst === name);
       }
       for (const n of nodes) {
         const nName = getNodeName(n);
