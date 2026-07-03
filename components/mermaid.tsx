@@ -9,7 +9,8 @@ interface Props {
   fontSize?: number;
 }
 
-const NODE_ID_RE = /^flowchart-(.+)-\d+$/;
+// Mermaid 11 node id: `${diagramId}-flowchart-<name>-<counter>` (e.g. `m-system-flowchart-SITE-5`).
+const NODE_ID_RE = /flowchart-(.+)-\d+$/;
 // Mermaid 11 edge id: `L_<src>_<dst>_<n>`. Names may contain '_' (e.g. SALES_APP),
 // so we can't parse by regex alone — we split against a known set of node names.
 const EDGE_ID_RE = /^L_(.+)_(\d+)$/;
@@ -202,23 +203,30 @@ export function Mermaid({ chart, id, fontSize = 18 }: Props) {
       }
     };
 
-    const bindings: Array<() => void> = [];
-    for (const n of nodes) {
-      const name = getNodeName(n);
-      if (!name) continue;
-      const enter = () => highlight(name);
-      const leave = () => clear();
-      n.addEventListener('mouseenter', enter);
-      n.addEventListener('mouseleave', leave);
-      (n as unknown as HTMLElement).style.cursor = 'pointer';
-      bindings.push(() => {
-        n.removeEventListener('mouseenter', enter);
-        n.removeEventListener('mouseleave', leave);
-      });
-    }
+    // Delegated hover: node groups can miss mouseenter if their child shapes
+    // don't fully cover the bounding box. Track pointer against the SVG root
+    // and highlight whichever node is under the cursor.
+    let currentName = '';
+    const onMove = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      const nodeEl = target?.closest?.('g.node') as SVGGElement | null;
+      const name = nodeEl ? getNodeName(nodeEl) : '';
+      if (name === currentName) return;
+      currentName = name;
+      if (name) highlight(name);
+      else clear();
+    };
+    const onLeave = () => {
+      currentName = '';
+      clear();
+    };
+
+    svgEl.addEventListener('mousemove', onMove);
+    svgEl.addEventListener('mouseleave', onLeave);
 
     return () => {
-      for (const off of bindings) off();
+      svgEl.removeEventListener('mousemove', onMove);
+      svgEl.removeEventListener('mouseleave', onLeave);
       clear();
     };
   }, [svg]);
