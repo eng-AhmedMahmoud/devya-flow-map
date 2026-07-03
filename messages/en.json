@@ -1,0 +1,212 @@
+{
+  "shell": {
+    "toggleAria": "Language",
+    "internalFlowMap": "Internal · Flow Map",
+    "internalRestricted": "Internal · Restricted",
+    "notIndexedFooter": "Internal document · not indexed ·"
+  },
+  "meta": {
+    "title": "Devya — System Flow Map",
+    "description": "How the Devya apps fit together: who logs in where, what each app does, where data flows."
+  },
+  "home": {
+    "title": "How Devya Solutions Works",
+    "intro": "A plain-English map of who does what, which app each team lives in, and how a client goes from booking a call to signing a contract — without any technical jargon.",
+    "introBookingA": "booking a call",
+    "introContractA": "signing a contract",
+    "legendTitle": "Reading the colours",
+    "legendCaption": "These colours repeat across every diagram, so once you learn them here, the rest scans instantly.",
+    "bigPictureTitle": "The big picture",
+    "bigPictureIntro": "Four teams. Nine apps — marketing, booking, sales, quote, tasks, contracts, feedback, mailer, and the admin dashboard. One shared database keeps every screen on the same truth in real time (the mailer is the one standalone tool).",
+    "appsTitle": "Each app, in one line",
+    "rolesTitle": "Who does what",
+    "journeyTitle": "A client journey, end to end",
+    "journeyIntro": "From the very first website visit to a signed contract — one slide, no jargon. The diagram has two lanes: the",
+    "journeyIntroClient": "client",
+    "journeyIntroAndUs": "on top,",
+    "journeyIntroUs": "us",
+    "journeyIntroBottom": "on the bottom.",
+    "bookingFlowTitle": "Booking flow",
+    "bookingFlowIntro": "Client books a slot → the team accepts or proposes alternatives → confirmation auto-creates a Meeting task with reminders.",
+    "salesFlowTitle": "Sales pipeline flow",
+    "salesFlowIntro": "Reps track leads through stages, log every touch (WhatsApp / call / meeting), schedule meetings straight into the booking calendar, close won leads with a one-click contract prefill, and lose the rest with a reason.",
+    "feedbackFlowTitle": "Feedback & reviews flow",
+    "feedbackFlowIntro": "After a project ships, the Feedback app emails the client a one-tap rating. Happy clients (4–5★) are sent straight to a public platform (Google / Clutch); unhappy ones (1–3★) leave a private comment the team reads first — so public reviews stay strong and problems get caught early.",
+    "contractFlowTitle": "Contract & e-sign flow",
+    "contractFlowIntro": "Sales drafts a contract from a template, sends an email with a sign link, and watches the status move from",
+    "contractFlowStatusDraft": "DRAFT",
+    "contractFlowStatusSent": "SENT",
+    "contractFlowStatusViewed": "VIEWED",
+    "contractFlowStatusSigned": "SIGNED",
+    "contractFlowInsideAdmin": "right inside the Admin dashboard.",
+    "clientSeesTitle": "What the client sees",
+    "clientSees1a": "Receives an email titled",
+    "clientSees1b": "\"Please review & sign your contract\"",
+    "clientSees1c": "with a single big",
+    "clientSees1d": "Open contract",
+    "clientSees1e": "button.",
+    "clientSees2a": "Lands on the contract page (no login — the email link is the credential). Status flips to",
+    "clientSees3a": "Types their name, draws a signature, ticks \"I agree\", hits sign. Status flips to",
+    "clientSees4a": "Gets the signed copy back by email (PDF + secure HTML link).",
+    "relateTitle": "How the apps relate",
+    "relateIntro": "One booking can trigger one Meeting task, one quote, and one contract. All of them stay linked so the team can jump between screens without losing context.",
+    "marketingFlowTitle": "Marketing flow",
+    "marketingFlowIntro": "Edit in Admin → save → public site refreshes within 60s. No deploys, no redeploys.",
+    "dataTitle": "Where the data lives"
+  },
+  "statuses": {
+    "pendingLabel": "Pending",
+    "pendingDesc": "Waiting for someone to act",
+    "activeLabel": "Active",
+    "activeDesc": "Currently moving",
+    "clientLabel": "Client",
+    "clientDesc": "In the client's hands",
+    "adminLabel": "Admin",
+    "adminDesc": "Internal review / oversight",
+    "stuckLabel": "Stuck",
+    "stuckDesc": "Declined / blocked"
+  },
+  "apps": {
+    "marketing": {
+      "name": "Marketing Site",
+      "desc": "The public-facing devya.dev — homepage, services, projects, blog.",
+      "role": "Where prospects land"
+    },
+    "booking": {
+      "name": "Booking App",
+      "desc": "Clients pick a free slot. Requests land in our Tasks app as Meeting Requests.",
+      "role": "Where clients book a call"
+    },
+    "tasks": {
+      "name": "Tasks App",
+      "desc": "Where Muhammed & Moaz live every day. Meeting requests appear as a bar at the top.",
+      "role": "Where the team triages work"
+    },
+    "sales": {
+      "name": "Sales App",
+      "desc": "Arabic-first pipeline. Reps run leads, log activity, schedule meetings, close deals.",
+      "role": "Where sales reps work leads"
+    },
+    "quote": {
+      "name": "Quote App",
+      "desc": "Clients build a quote from services and see a live invoice, then convert it into a contract.",
+      "role": "Where quotes become contracts"
+    },
+    "contracts": {
+      "name": "Contracts App",
+      "desc": "Generate a contract from a template, send by email, client signs in browser.",
+      "role": "Where contracts are drafted & signed"
+    },
+    "feedback": {
+      "name": "Feedback App",
+      "desc": "After delivery, sends a review request. Happy clients go to Google/Clutch; unhappy ones leave private feedback first.",
+      "role": "Where reviews are collected"
+    },
+    "mailer": {
+      "name": "Mailer App",
+      "desc": "Internal outbound-email composer that sends branded messages from the company mailbox. Its own login and SMTP — standalone.",
+      "role": "Where the team sends email"
+    },
+    "admin": {
+      "name": "Admin Dashboard",
+      "desc": "Edit the marketing site, watch every booking + contract, and manage users, roles & access.",
+      "role": "Where ops oversees everything"
+    }
+  },
+  "roles": {
+    "marketing": {
+      "title": "Marketing",
+      "duty1": "Sign in to Admin dashboard",
+      "duty2": "Edit homepage, services, projects, testimonials, blog",
+      "duty3": "Upload images (auto-pushed to Cloudflare)",
+      "duty4": "Publish — site refreshes within 60 seconds"
+    },
+    "sales": {
+      "title": "Sales / Front desk",
+      "duty1": "Watch the Meeting Requests bar in the Tasks app",
+      "duty2": "Accept a slot OR propose 1–10 alternatives",
+      "duty3": "Confirmation emails go out automatically",
+      "duty4": "After meeting, draft a contract from a template"
+    },
+    "legal": {
+      "title": "Legal / Contracts",
+      "duty1": "Open Contracts app from the Admin sidebar",
+      "duty2": "Pick NDA, Project, Consultancy or Retainer template",
+      "duty3": "Fill client + scope + price, click Send",
+      "duty4": "Track status from the Admin dashboard"
+    },
+    "delivery": {
+      "title": "Delivery / Team",
+      "duty1": "Confirmed meeting auto-creates a Meeting task",
+      "duty2": "Important + urgency by deadline (CR-1 rules)",
+      "duty3": "Email reminders 8h and 3h before the meeting",
+      "duty4": "Mark complete with proof from the Tasks app"
+    }
+  },
+  "relations": {
+    "bookingToTasks": {
+      "from": "Booking app",
+      "to": "Tasks app",
+      "note": "Each confirmed slot auto-creates a \"Meeting\" task — important by default, urgency follows the date."
+    },
+    "tasksToAdmin": {
+      "from": "Tasks app",
+      "to": "Admin dashboard",
+      "note": "Every booking + meeting task is also visible in Admin under /bookings."
+    },
+    "contractsToAdmin": {
+      "from": "Contracts app",
+      "to": "Admin dashboard",
+      "note": "Every contract appears in /contracts with live status (DRAFT → SIGNED) and a signed-PDF download."
+    },
+    "quoteToContracts": {
+      "from": "Quote app",
+      "to": "Contracts app",
+      "note": "A finished quote converts into a prefilled contract — services, scope and price carry straight over."
+    },
+    "wonToFeedback": {
+      "from": "Won deal",
+      "to": "Feedback app",
+      "note": "After delivery, a review request goes out; the rating and any private comment land back with the team."
+    },
+    "mailerToMailbox": {
+      "from": "Mailer app",
+      "to": "Company mailbox",
+      "note": "Standalone tool with its own login + SMTP — the team composes and sends branded outbound email; it does not touch the shared database."
+    }
+  },
+  "data": {
+    "dbTitle": "One database",
+    "dbBody": "Postgres on the Hostinger VPS holds users & roles, bookings, sales leads, contracts, tasks, feedback, and every CMS entity. Every app (except the standalone mailer) reads from this single source of truth, so screens never disagree.",
+    "imagesTitle": "Images on Cloudflare",
+    "imagesBody": "Uploads from the Admin dashboard go straight to Cloudflare Images. The marketing site pulls them via"
+  },
+  "login": {
+    "title": "Devya Flow Map",
+    "subtitle": "This document is confidential. Enter the access password to continue.",
+    "forgot": "Forgot the password?",
+    "emailLink": "Email contact@devya.dev",
+    "passwordLabel": "Access password",
+    "passwordPlaceholder": "Enter password",
+    "verifying": "Verifying…",
+    "unlock": "Unlock",
+    "signInFailed": "Sign-in failed.",
+    "networkError": "Network error. Try again."
+  },
+  "credentials": {
+    "chip": "Admin Access",
+    "title": "Sign-in credentials",
+    "subtitle": "For the marketing team and ops admins. Keep these private.",
+    "openDashboard": "Open dashboard",
+    "labelUrl": "URL",
+    "labelEmail": "Email",
+    "labelPassword": "Password",
+    "labelLocalDev": "Local dev",
+    "hintLocalDev": "Behind portless; same creds.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "resetHintA": "Lost the password? Re-run",
+    "resetHintB": "with a new",
+    "resetHintC": "on the VPS."
+  }
+}

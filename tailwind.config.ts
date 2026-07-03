@@ -19,7 +19,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sora: ['Sora', 'system-ui', 'sans-serif'],
+        sora: ['var(--font-sora)', 'Sora', 'system-ui', 'sans-serif'],
+        cairo: ['var(--font-cairo)', 'Cairo', 'system-ui', 'sans-serif'],
       },
     },
   },
