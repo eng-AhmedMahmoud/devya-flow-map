@@ -48,15 +48,12 @@ export function LocaleProvider({
     body.classList.toggle('font-sora', locale !== 'ar');
   }, [locale]);
 
+  // System dashboard is English-only; no persisted locale switching. Kept so
+  // the context shape is stable for any useT/useLocale consumers.
   const setLocale = useCallback((next: LocaleCode) => {
     if (localeRef.current === next) return;
     localeRef.current = next;
     setLocaleState(next);
-    fetch('/api/locale', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ locale: next }),
-    }).catch(() => {});
   }, []);
 
   return (

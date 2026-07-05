@@ -1,5 +1,4 @@
 import { CredentialsCard } from '@/components/credentials-card';
-import { LocaleToggle } from '@/components/locale-toggle';
 import { Shell } from '@/components/ui/shell';
 import {
   SystemMap,
@@ -116,9 +115,8 @@ export default async function FlowMapPage() {
       <div className="mx-auto max-w-6xl space-y-20 py-4 md:py-8">
         {/* Header */}
         <header className="space-y-5">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-4 flex-wrap">
             <span className="chip">{t(dict, 'shell.internalFlowMap')}</span>
-            <LocaleToggle />
           </div>
           <h1 className="text-5xl md:text-6xl font-semibold text-white tracking-tight leading-[1.05]">
             {t(dict, 'home.title')}

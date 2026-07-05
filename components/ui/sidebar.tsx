@@ -13,7 +13,6 @@ import {
   UserCog,
 } from 'lucide-react';
 import { DevyaLogo } from './devya-logo';
-import { LocaleToggle } from '@/components/locale-toggle';
 import { api, type AdminRole, type AdminUser } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
@@ -127,9 +126,6 @@ export function Sidebar() {
       </nav>
 
       <div className="px-3 pb-3 space-y-2">
-        <div className="flex justify-center">
-          <LocaleToggle />
-        </div>
         <button
           onClick={handleLogout}
           disabled={pending}

@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { LoginForm } from '@/components/auth/login-form';
-import { LocaleToggle } from '@/components/locale-toggle';
 import { api, ApiError } from '@/lib/api';
 import { getLocale } from '@/lib/i18n/server';
 import { getDictionary, t } from '@/lib/i18n/dictionary';
@@ -29,9 +28,6 @@ export default async function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-grid px-6 py-12">
       <div className="w-full max-w-md space-y-8">
-        <div className="flex justify-center">
-          <LocaleToggle />
-        </div>
         <header className="space-y-3 text-center">
           <span className="chip mx-auto">{t(dict, 'shell.internalRestricted')}</span>
           <h1 className="text-3xl font-semibold text-white tracking-tight">
