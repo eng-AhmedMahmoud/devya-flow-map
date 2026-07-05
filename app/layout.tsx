@@ -3,6 +3,7 @@ import { getLocale } from '@/lib/i18n/server';
 import { getLocaleConfig } from '@/lib/i18n/locales';
 import { getDictionary, t } from '@/lib/i18n/dictionary';
 import { LocaleProvider } from '@/lib/i18n/client';
+import { DialogProvider } from '@/components/ui/dialog-provider';
 import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,7 +33,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         className={`antialiased ${fontClass} bg-ink-900 text-ink-100`}
         suppressHydrationWarning
       >
-        <LocaleProvider locale={locale}>{children}</LocaleProvider>
+        <LocaleProvider locale={locale}>
+          <DialogProvider>{children}</DialogProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import { CredentialsCard } from '@/components/credentials-card';
 import { LocaleToggle } from '@/components/locale-toggle';
+import { Shell } from '@/components/ui/shell';
 import {
   SystemMap,
   MarketingFlow,
@@ -111,8 +112,8 @@ export default async function FlowMapPage() {
   const dict = getDictionary(locale);
 
   return (
-    <main className="min-h-screen px-6 py-12 md:py-20">
-      <div className="mx-auto max-w-6xl space-y-20">
+    <Shell>
+      <div className="mx-auto max-w-6xl space-y-20 py-4 md:py-8">
         {/* Header */}
         <header className="space-y-5">
           <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -431,7 +432,7 @@ export default async function FlowMapPage() {
           <span className="font-mono">noindex,nofollow</span>
         </footer>
       </div>
-    </main>
+    </Shell>
   );
 }
 

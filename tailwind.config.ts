@@ -5,18 +5,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Full ink scale shared with admin-app — the monitoring pages ported from
+        // the admin dashboard reference 950/850/750, which the original flow-map
+        // palette lacked. Values match admin-app/tailwind.config.ts.
         ink: {
-          50: '#f5f5f5',
-          100: '#e5e5e5',
-          200: '#c4c4c4',
-          300: '#9a9a9a',
-          400: '#6b6b6b',
-          500: '#4a4a4a',
-          600: '#2e2e2e',
-          700: '#1c1c1c',
-          800: '#121212',
-          900: '#0a0a0a',
+          950: '#0A0A0A',
+          900: '#0F0F0F',
+          850: '#141414',
+          800: '#1A1A1A',
+          750: '#1F1F1F',
+          700: '#262626',
+          600: '#333333',
+          500: '#525252',
+          400: '#737373',
+          300: '#A3A3A3',
+          200: '#D4D4D4',
+          100: '#F5F5F5',
+          50: '#F5F5F5',
         },
+        marketing: { DEFAULT: '#F97316', soft: 'rgba(249,115,22,0.12)' },
+        development: { DEFAULT: '#3B82F6', soft: 'rgba(59,130,246,0.12)' },
+        business: { DEFAULT: '#10B981', soft: 'rgba(16,185,129,0.12)' },
       },
       fontFamily: {
         sora: ['var(--font-sora)', 'Sora', 'system-ui', 'sans-serif'],

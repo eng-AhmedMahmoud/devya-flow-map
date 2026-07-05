@@ -1,38 +1,35 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-const COOKIE_NAME = 'devya_flowmap_auth';
-const MAX_AGE = 60 * 60 * 24 * 7;
+const COOKIE_NAME = process.env.SESSION_COOKIE_NAME ?? 'devya_session';
+const UPSTREAM = process.env.API_PROXY_TARGET ?? 'https://api.devya-solutions.com';
 
-export async function POST(req: Request) {
-  let password = '';
-  try {
-    const body = await req.json();
-    password = typeof body?.password === 'string' ? body.password : '';
-  } catch {
-    return NextResponse.json({ ok: false, error: 'Invalid body' }, { status: 400 });
-  }
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
-  const expectedPassword = process.env.SITE_PASSWORD;
-  const token = process.env.SITE_AUTH_TOKEN;
-
-  if (!expectedPassword || !token) {
-    return NextResponse.json(
-      { ok: false, error: 'Server not configured. Set SITE_PASSWORD and SITE_AUTH_TOKEN.' },
-      { status: 500 },
-    );
-  }
-
-  if (password !== expectedPassword) {
-    return NextResponse.json({ ok: false, error: 'Wrong password.' }, { status: 401 });
-  }
-
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: MAX_AGE,
+export async function POST(req: NextRequest) {
+  const body = await req.text();
+  const res = await fetch(`${UPSTREAM}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body,
   });
-  return res;
+  const text = await res.text();
+  const out = new NextResponse(text, {
+    status: res.status,
+    headers: { 'content-type': res.headers.get('content-type') ?? 'application/json' },
+  });
+  if (res.ok) {
+    const sc = res.headers.get('set-cookie');
+    const m = sc?.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
+    if (m) {
+      out.cookies.set(COOKIE_NAME, m[1], {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+  }
+  return out;
 }

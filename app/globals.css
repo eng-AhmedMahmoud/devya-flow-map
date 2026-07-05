@@ -52,6 +52,21 @@ body.font-cairo {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
+/* Grid background + focus ring — used by the monitoring pages/shell ported
+   from admin-app (Shell wrapper, login screen, nav focus states). */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+.ring-focus:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15), 0 0 0 4px rgba(59, 130, 246, 0.4);
+}
+
 /* Animated border for things we want the eye to land on first
    (the "where am I in the flow" anchor on each section).
    Subtle conic-gradient sweep, ~7s loop. */
