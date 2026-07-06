@@ -148,6 +148,62 @@ body.font-cairo {
 .status-admin    { color: #e9d5ff; border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.10); }
 .status-danger   { color: #fecaca; border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.10); }
 
+/* Rendered-markdown styling for the process docs (/docs). Scoped so it
+   can't leak into the dashboards. */
+.doc-prose h1 { font-size: 1.5rem; font-weight: 600; color: #fff; margin: 0 0 0.75rem; }
+.doc-prose h2 { font-size: 1.15rem; font-weight: 600; color: #fff; margin: 2rem 0 0.6rem; }
+.doc-prose h3 { font-size: 1rem; font-weight: 600; color: #f5f5f5; margin: 1.5rem 0 0.5rem; }
+.doc-prose p { color: #a3a3a3; font-size: 0.925rem; margin: 0.6rem 0; }
+.doc-prose ul, .doc-prose ol { color: #a3a3a3; font-size: 0.925rem; margin: 0.6rem 0; padding-inline-start: 1.4rem; }
+.doc-prose ul { list-style: disc; }
+.doc-prose ol { list-style: decimal; }
+.doc-prose li { margin: 0.3rem 0; }
+.doc-prose li::marker { color: #525252; }
+.doc-prose strong { color: #f5f5f5; font-weight: 600; }
+.doc-prose a { color: #93c5fd; text-decoration: underline; text-underline-offset: 3px; }
+.doc-prose code {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.1em 0.4em;
+  font-size: 0.85em;
+  color: #d4d4d4;
+}
+.doc-prose hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 2rem 0; }
+.doc-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+}
+.doc-prose th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #737373;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+.doc-prose td {
+  color: #a3a3a3;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+}
+.doc-prose td:first-child { color: #d4d4d4; white-space: nowrap; }
+.doc-prose input[type='checkbox'] { accent-color: #34d399; margin-inline-end: 0.4rem; vertical-align: -0.1em; }
+.doc-prose blockquote {
+  border-inline-start: 2px solid rgba(255, 255, 255, 0.15);
+  padding-inline-start: 1rem;
+  margin: 1rem 0;
+  color: #737373;
+}
+
 /* Mermaid styling overrides */
 .mermaid svg {
   max-width: 100%;

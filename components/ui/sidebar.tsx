@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import {
+  BookOpen,
   ExternalLink,
   History,
   Loader2,
@@ -34,6 +35,7 @@ const NAV: NavItem[] = [
   { href: '/users', label: 'Users', icon: UserCog },
   { href: '/deployments', label: 'Deployments', icon: Rocket },
   { href: '/activity', label: 'Activity', icon: History, superAdminOnly: true },
+  { href: '/docs', label: 'Process Docs', icon: BookOpen },
 ];
 
 // Cached across navigations — the sidebar only needs the role once per session.
