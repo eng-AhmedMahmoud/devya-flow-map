@@ -15,6 +15,7 @@ export interface ManagedUser {
   name: string;
   role: UserRole;
   jobRole: JobRole | null;
+  whatsapp: string | null;
   isActive: boolean;
   lastLoginAt: string | null;
   passwordUpdatedAt: string | null;
@@ -85,6 +86,8 @@ export interface CreateUserBody {
   name: string;
   role: UserRole;
   jobRole?: JobRole;
+  /** International format: `+` then 8–15 digits. */
+  whatsapp: string;
   sendInvite?: boolean;
   avatarUrl?: string;
 }
@@ -100,6 +103,8 @@ export interface UpdateUserBody {
   role?: UserRole;
   /** `null` clears the job role. */
   jobRole?: JobRole | null;
+  /** International format: `+` then 8–15 digits. */
+  whatsapp?: string;
   isActive?: boolean;
   mustChangePassword?: boolean;
   /** Empty string clears the current avatar. */

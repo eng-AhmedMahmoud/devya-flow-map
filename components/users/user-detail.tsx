@@ -33,6 +33,7 @@ export function UserDetail({ user, recentEvents }: Props) {
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const [name, setName] = useState(user.name);
+  const [whatsapp, setWhatsapp] = useState(user.whatsapp ?? '');
   const [role, setRole] = useState<UserRole>(user.role);
   const [jobRole, setJobRole] = useState<JobRole | null>(user.jobRole);
   const [isActive, setIsActive] = useState(user.isActive);
@@ -48,6 +49,7 @@ export function UserDetail({ user, recentEvents }: Props) {
   const locked = isUserLocked(user);
   const dirty =
     name.trim() !== user.name ||
+    whatsapp.trim() !== (user.whatsapp ?? '') ||
     role !== user.role ||
     jobRole !== user.jobRole ||
     isActive !== user.isActive ||
@@ -80,6 +82,7 @@ export function UserDetail({ user, recentEvents }: Props) {
 
     const body: UpdateUserBody = {};
     if (name.trim() !== user.name) body.name = name.trim();
+    if (whatsapp.trim() !== (user.whatsapp ?? '')) body.whatsapp = whatsapp.trim();
     if (role !== user.role) body.role = role;
     if (jobRole !== user.jobRole) body.jobRole = jobRole;
     if (isActive !== user.isActive) body.isActive = isActive;
@@ -153,6 +156,15 @@ export function UserDetail({ user, recentEvents }: Props) {
           <div className="grid gap-4 sm:grid-cols-2">
             <TextField label="Name" value={name} onChange={setName} required maxLength={120} />
             <TextField label="Email" value={user.email} onChange={() => undefined} disabled helper="Email cannot be changed." />
+            <TextField
+              label="WhatsApp number"
+              value={whatsapp}
+              onChange={setWhatsapp}
+              required
+              type="tel"
+              placeholder="+2010XXXXXXXX"
+              helper="Active WhatsApp number — used for team contact"
+            />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-4">

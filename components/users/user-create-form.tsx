@@ -18,6 +18,7 @@ export function UserCreateForm() {
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [role, setRole] = useState<UserRole>('TEAM');
   const [jobRole, setJobRole] = useState<JobRole | null>(null);
   const [sendInvite, setSendInvite] = useState(true);
@@ -31,6 +32,7 @@ export function UserCreateForm() {
         const res = await usersApi.create({
           email: email.trim(),
           name: name.trim(),
+          whatsapp: whatsapp.trim(),
           role,
           ...(jobRole ? { jobRole } : {}),
           sendInvite,
@@ -154,6 +156,15 @@ export function UserCreateForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField label="Email" value={email} onChange={setEmail} required type="email" placeholder="name@devya.dev" />
           <TextField label="Name" value={name} onChange={setName} required maxLength={120} placeholder="Full name" />
+          <TextField
+            label="WhatsApp number"
+            value={whatsapp}
+            onChange={setWhatsapp}
+            required
+            type="tel"
+            placeholder="+2010XXXXXXXX"
+            helper="Active WhatsApp number — used for team contact"
+          />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <RoleSelect label="Role" value={role} onChange={setRole} helper="Controls what the user can access." />
