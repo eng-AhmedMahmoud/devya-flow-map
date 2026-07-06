@@ -1,4 +1,4 @@
-import { isUserLocked, type AuthEventType, type ManagedUser, type UserRole } from '@/lib/users-api';
+import { isUserLocked, type AuthEventType, type JobRole, type ManagedUser, type UserRole } from '@/lib/users-api';
 
 export const ROLE_META: Record<UserRole, { label: string; color: string }> = {
   SUPER_ADMIN: { label: 'Super admin', color: '#F97316' },
@@ -6,6 +6,16 @@ export const ROLE_META: Record<UserRole, { label: string; color: string }> = {
   TEAM: { label: 'Team', color: '#A3A3A3' },
   SALES_REP: { label: 'Sales rep', color: '#F59E0B' },
   SALES_MANAGER: { label: 'Sales manager', color: '#10B981' },
+};
+
+/** Delivery-team function — neutral tone so it reads secondary to the access role. */
+export const JOB_ROLE_META: Record<JobRole, { label: string }> = {
+  PRODUCT_OWNER: { label: 'Product owner' },
+  SCRUM_MASTER: { label: 'Scrum master' },
+  TECH_LEAD: { label: 'Tech lead' },
+  DEVELOPER: { label: 'Developer' },
+  DESIGNER: { label: 'Designer' },
+  TESTER: { label: 'Tester' },
 };
 
 export const EVENT_META: Record<AuthEventType, { label: string; color: string }> = {
@@ -39,6 +49,11 @@ function Pill({ label, color }: { label: string; color: string }) {
 export function RoleBadge({ role }: { role: UserRole }) {
   const meta = ROLE_META[role];
   return <Pill label={meta.label} color={meta.color} />;
+}
+
+export function JobRoleBadge({ jobRole }: { jobRole: JobRole | null }) {
+  if (!jobRole) return <span className="text-ink-500">—</span>;
+  return <Pill label={JOB_ROLE_META[jobRole].label} color="#A3A3A3" />;
 }
 
 export function UserStatusBadge({ user }: { user: Pick<ManagedUser, 'isActive' | 'lockedUntil'> }) {

@@ -4,11 +4,17 @@ export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'TEAM' | 'SALES_REP' | 'SALES_M
 
 export const USER_ROLES: UserRole[] = ['SUPER_ADMIN', 'ADMIN', 'TEAM', 'SALES_REP', 'SALES_MANAGER'];
 
+/** Org-wide delivery-team function — distinct from the access `role`. */
+export type JobRole = 'PRODUCT_OWNER' | 'SCRUM_MASTER' | 'TECH_LEAD' | 'DEVELOPER' | 'DESIGNER' | 'TESTER';
+
+export const JOB_ROLES: JobRole[] = ['PRODUCT_OWNER', 'SCRUM_MASTER', 'TECH_LEAD', 'DEVELOPER', 'DESIGNER', 'TESTER'];
+
 export interface ManagedUser {
   id: string;
   email: string;
   name: string;
   role: UserRole;
+  jobRole: JobRole | null;
   isActive: boolean;
   lastLoginAt: string | null;
   passwordUpdatedAt: string | null;
@@ -78,6 +84,7 @@ export interface CreateUserBody {
   email: string;
   name: string;
   role: UserRole;
+  jobRole?: JobRole;
   sendInvite?: boolean;
   avatarUrl?: string;
 }
@@ -91,6 +98,8 @@ export interface CreateUserResponse {
 export interface UpdateUserBody {
   name?: string;
   role?: UserRole;
+  /** `null` clears the job role. */
+  jobRole?: JobRole | null;
   isActive?: boolean;
   mustChangePassword?: boolean;
   /** Empty string clears the current avatar. */

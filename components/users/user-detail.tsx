@@ -11,12 +11,13 @@ import {
   usersApi,
   usersApiErrorMessage,
   type AuthEvent,
+  type JobRole,
   type ManagedUser,
   type ResetPasswordResponse,
   type UpdateUserBody,
   type UserRole,
 } from '@/lib/users-api';
-import { RoleSelect } from './role-select';
+import { JobRoleSelect, RoleSelect } from './role-select';
 import { RoleMatrixPanel } from './role-matrix-panel';
 import { EventBadge, ROLE_META, relativeTime } from './user-badges';
 
@@ -33,6 +34,7 @@ export function UserDetail({ user, recentEvents }: Props) {
 
   const [name, setName] = useState(user.name);
   const [role, setRole] = useState<UserRole>(user.role);
+  const [jobRole, setJobRole] = useState<JobRole | null>(user.jobRole);
   const [isActive, setIsActive] = useState(user.isActive);
   const [mustChangePassword, setMustChangePassword] = useState(user.mustChangePassword);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? '');
@@ -47,6 +49,7 @@ export function UserDetail({ user, recentEvents }: Props) {
   const dirty =
     name.trim() !== user.name ||
     role !== user.role ||
+    jobRole !== user.jobRole ||
     isActive !== user.isActive ||
     mustChangePassword !== user.mustChangePassword ||
     avatarUrl.trim() !== (user.avatarUrl ?? '');
@@ -78,6 +81,7 @@ export function UserDetail({ user, recentEvents }: Props) {
     const body: UpdateUserBody = {};
     if (name.trim() !== user.name) body.name = name.trim();
     if (role !== user.role) body.role = role;
+    if (jobRole !== user.jobRole) body.jobRole = jobRole;
     if (isActive !== user.isActive) body.isActive = isActive;
     if (mustChangePassword !== user.mustChangePassword) body.mustChangePassword = mustChangePassword;
     if (avatarUrl.trim() !== (user.avatarUrl ?? '')) body.avatarUrl = avatarUrl.trim();
@@ -151,7 +155,15 @@ export function UserDetail({ user, recentEvents }: Props) {
             <TextField label="Email" value={user.email} onChange={() => undefined} disabled helper="Email cannot be changed." />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <RoleSelect label="Role" value={role} onChange={setRole} helper="Controls what the user can access." />
+            <div className="space-y-4">
+              <RoleSelect label="Role" value={role} onChange={setRole} helper="Controls what the user can access." />
+              <JobRoleSelect
+                label="Job role"
+                value={jobRole}
+                onChange={setJobRole}
+                helper="Delivery-team function — does not affect access."
+              />
+            </div>
             <div className="space-y-3">
               <SwitchToggle
                 label="Active account"

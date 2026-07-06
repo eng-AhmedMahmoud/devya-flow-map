@@ -5,10 +5,10 @@ import { useState, useTransition } from 'react';
 import { ArrowLeft, CheckCircle2, Copy, Loader2, Mail, MailX, Save, UserPlus } from 'lucide-react';
 import { TextField, SwitchToggle } from '@/components/cms/fields';
 import { MediaPicker } from '@/components/cms/fields/media-picker';
-import { RoleSelect } from './role-select';
+import { JobRoleSelect, RoleSelect } from './role-select';
 import { RoleMatrixPanel } from './role-matrix-panel';
-import { RoleBadge } from './user-badges';
-import { usersApi, usersApiErrorMessage, type CreateUserResponse, type UserRole } from '@/lib/users-api';
+import { JobRoleBadge, RoleBadge } from './user-badges';
+import { usersApi, usersApiErrorMessage, type CreateUserResponse, type JobRole, type UserRole } from '@/lib/users-api';
 
 export function UserCreateForm() {
   const [submitting, start] = useTransition();
@@ -19,6 +19,7 @@ export function UserCreateForm() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState<UserRole>('TEAM');
+  const [jobRole, setJobRole] = useState<JobRole | null>(null);
   const [sendInvite, setSendInvite] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState('');
 
@@ -31,6 +32,7 @@ export function UserCreateForm() {
           email: email.trim(),
           name: name.trim(),
           role,
+          ...(jobRole ? { jobRole } : {}),
           sendInvite,
           ...(avatarUrl.trim() ? { avatarUrl: avatarUrl.trim() } : {}),
         });
@@ -64,6 +66,7 @@ export function UserCreateForm() {
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
             <span className="text-sm text-white font-medium">{result.user.name}</span>
             <RoleBadge role={result.user.role} />
+            {result.user.jobRole ? <JobRoleBadge jobRole={result.user.jobRole} /> : null}
           </div>
 
           <div
@@ -154,6 +157,12 @@ export function UserCreateForm() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <RoleSelect label="Role" value={role} onChange={setRole} helper="Controls what the user can access." />
+          <JobRoleSelect
+            label="Job role"
+            value={jobRole}
+            onChange={setJobRole}
+            helper="Optional. Delivery-team function — does not affect access."
+          />
           <SwitchToggle
             label="Send invite email"
             value={sendInvite}

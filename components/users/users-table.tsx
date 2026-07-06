@@ -15,7 +15,7 @@ import {
   useBulkSelect,
   type BulkActionDef,
 } from '@/components/ui/bulk-select-toolbar';
-import { ROLE_META, RoleBadge, UserStatusBadge, relativeTime } from './user-badges';
+import { JobRoleBadge, ROLE_META, RoleBadge, UserStatusBadge, relativeTime } from './user-badges';
 
 export interface UsersTableFilters {
   search: string;
@@ -104,7 +104,7 @@ export function UsersTable({ users, total, filters, currentRole }: Props) {
     }
   }
 
-  const colCount = 5 + (bulk.batchMode ? 1 : 0) + (isSuperAdmin ? 1 : 0);
+  const colCount = 6 + (bulk.batchMode ? 1 : 0) + (isSuperAdmin ? 1 : 0);
 
   return (
     <div className="space-y-4">
@@ -157,6 +157,7 @@ export function UsersTable({ users, total, filters, currentRole }: Props) {
                 {bulk.batchMode && <th className="w-10 px-4 py-3 font-medium" aria-label="Select" />}
                 <th className="px-4 py-3 font-medium">User</th>
                 <th className="px-4 py-3 font-medium">Role</th>
+                <th className="px-4 py-3 font-medium">Job role</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Last login</th>
                 <th className="px-4 py-3 font-medium">Created</th>
@@ -215,6 +216,9 @@ export function UsersTable({ users, total, filters, currentRole }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <RoleBadge role={u.role} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <JobRoleBadge jobRole={u.jobRole} />
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1.5">
