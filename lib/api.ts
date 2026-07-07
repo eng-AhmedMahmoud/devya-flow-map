@@ -139,6 +139,12 @@ export const api = {
   logout: () => apiFetch<void>('/api/auth/logout', { method: 'POST' }),
   forgotPassword: (email: string) =>
     apiFetch<{ ok: true }>('/api/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+  verifyResetOtp: (email: string, code: string) =>
+    apiFetch<{ resetToken: string }>('/api/auth/verify-reset-otp', { method: 'POST', body: JSON.stringify({ email, code }) }),
+  verifyEmail: (email: string, code: string) =>
+    apiFetch<{ ok: true }>('/api/auth/verify-email', { method: 'POST', body: JSON.stringify({ email, code }) }),
+  resendVerification: (email: string) =>
+    apiFetch<{ ok: true }>('/api/auth/resend-verification', { method: 'POST', body: JSON.stringify({ email }) }),
   resetPassword: (token: string, newPassword: string) =>
     apiFetch<{ ok: true }>('/api/auth/reset-password', { method: 'POST', body: JSON.stringify({ token, newPassword }) }),
   changePassword: (currentPassword: string, newPassword: string) =>
