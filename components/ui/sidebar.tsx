@@ -11,6 +11,7 @@ import {
   LogOut,
   Network,
   Rocket,
+  Sparkles,
   UserCog,
 } from 'lucide-react';
 import { DevyaLogo } from './devya-logo';
@@ -31,7 +32,8 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { href: '/', label: 'System Map', icon: Network, exact: true },
+  { href: '/', label: 'Ask Devya', icon: Sparkles, exact: true },
+  { href: '/map', label: 'System Map', icon: Network },
   { href: '/users', label: 'Users', icon: UserCog },
   { href: '/deployments', label: 'Deployments', icon: Rocket },
   { href: '/activity', label: 'Activity', icon: History, superAdminOnly: true },
