@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BookOpen, Loader2, Send, Sparkles } from 'lucide-react';
 import { ApiError, apiFetch } from '@/lib/api';
+import { AnswerMarkdown } from './answer-markdown';
 import { cn } from '@/lib/utils';
 
 type Turn = { role: 'user' | 'assistant'; content: string };
@@ -113,13 +114,17 @@ export function AssistantChat() {
             key={i}
             dir="auto"
             className={cn(
-              'rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap',
+              'rounded-2xl px-4 py-3 text-sm leading-relaxed',
               turn.role === 'user'
-                ? 'bg-white text-ink-950 ms-12'
+                ? 'bg-white text-ink-950 ms-12 whitespace-pre-wrap'
                 : 'border border-white/10 bg-white/[0.03] text-ink-100 me-12',
             )}
           >
-            {turn.content}
+            {turn.role === 'assistant' ? (
+              <AnswerMarkdown content={turn.content} />
+            ) : (
+              turn.content
+            )}
           </div>
         ))}
 
