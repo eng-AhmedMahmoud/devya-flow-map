@@ -5,7 +5,7 @@ import { Mermaid } from './mermaid';
  * passes information between each other. Tuned for non-technical readers —
  * swimlane per department, plain-language arrow labels. Covers the full
  * platform: marketing, booking, sales, quote, tasks, contracts, feedback,
- * mailer, and the admin dashboard (which now includes user management).
+ * x-ray, mailer, and the admin dashboard (which now includes user management).
  */
 export function SystemMap() {
   const chart = `
@@ -17,6 +17,7 @@ flowchart LR
     CL_QUOTE[Builds a quote]
     CL_PORTAL[Signs contract<br/>by email]
     CL_REVIEW[Leaves a review<br/>after delivery]
+    CL_XRAY[Runs an engineering<br/>self-review]
   end
 
   subgraph SALES["💼 SALES"]
@@ -50,6 +51,7 @@ flowchart LR
     TASKS["✅ Tasks app<br/>tasks.devya-solutions.com"]
     CON["📝 Contracts app<br/>contracts.devya-solutions.com"]
     FEED["⭐ Feedback app<br/>feedback.devya-solutions.com"]
+    XRAY["🩻 X-Ray app<br/>xray.devya.dev"]
     MAILER["✉️ Mailer app<br/>mailer.devya-solutions.com"]
     DASH["🗂 Admin + Users<br/>admin.devya-solutions.com"]
     DATA[("💾 Shared database<br/>one source of truth")]
@@ -60,6 +62,7 @@ flowchart LR
   CL_QUOTE ==> QUOTE
   CL_PORTAL ==> CON
   CL_REVIEW ==> FEED
+  CL_XRAY ==> XRAY
   SAL_REVIEW ==> BOOK
   SAL_LEADS ==> SALES_APP
   SAL_CONTRACT ==> CON
@@ -75,12 +78,15 @@ flowchart LR
   OPS_USERS ==> DASH
   OPS_MAIL ==> MAILER
 
+  SITE -. links to .-> XRAY
+  XRAY ==> DASH
   SITE -. content -.-> DATA
   BOOK <==> DATA
   SALES_APP <==> DATA
   TASKS <==> DATA
   CON <==> DATA
   FEED <==> DATA
+  XRAY <==> DATA
   DASH <==> DATA
 
   classDef lane fill:#0d0d0d,stroke:#2a2a2a,color:#f5f5f5,stroke-width:1.5px
@@ -89,8 +95,8 @@ flowchart LR
   classDef mail fill:#231a0a,stroke:#fbbf24,color:#fde68a,stroke-width:2px,rx:12,ry:12
   classDef store fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff,stroke-width:2px
 
-  class VISITOR,CL_BOOK,CL_QUOTE,CL_PORTAL,CL_REVIEW,SAL_REVIEW,SAL_LEADS,SAL_CONTRACT,DEL_MEET,DEL_TASKS,DEL_FEED,OPS_CMS,OPS_BOARD,OPS_USERS,OPS_MAIL step
-  class SITE,BOOK,SALES_APP,QUOTE,TASKS,CON,FEED,DASH app
+  class VISITOR,CL_BOOK,CL_QUOTE,CL_PORTAL,CL_REVIEW,CL_XRAY,SAL_REVIEW,SAL_LEADS,SAL_CONTRACT,DEL_MEET,DEL_TASKS,DEL_FEED,OPS_CMS,OPS_BOARD,OPS_USERS,OPS_MAIL step
+  class SITE,BOOK,SALES_APP,QUOTE,TASKS,CON,FEED,XRAY,DASH app
   class MAILER mail
   class DATA store
 

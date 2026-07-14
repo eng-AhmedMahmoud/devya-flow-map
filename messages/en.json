@@ -102,6 +102,11 @@
       "desc": "After delivery, sends a review request. Happy clients go to Google/Clutch; unhappy ones leave private feedback first.",
       "role": "Where reviews are collected"
     },
+    "xray": {
+      "name": "X-Ray",
+      "desc": "Engineering-review consultancy. Clients run a self-assessment and get an interactive report — bilingual, with a paid deep-dive and a free snapshot.",
+      "role": "Where clients self-assess their engineering"
+    },
     "mailer": {
       "name": "Mailer App",
       "desc": "Internal outbound-email composer that sends branded messages from the company mailbox. Its own login and SMTP — standalone.",

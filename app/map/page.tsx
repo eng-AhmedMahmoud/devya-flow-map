@@ -24,6 +24,7 @@ import {
   Star,
   Send,
   Calculator,
+  Activity,
 } from 'lucide-react';
 import { getLocale } from '@/lib/i18n/server';
 import { getDictionary, t, type Dictionary } from '@/lib/i18n/dictionary';
@@ -38,6 +39,7 @@ type AppKey =
   | 'quote'
   | 'contracts'
   | 'feedback'
+  | 'xray'
   | 'mailer'
   | 'admin';
 
@@ -53,6 +55,7 @@ const APP_ORDER: Array<{
   { key: 'quote', url: 'https://quote.devya-solutions.com', icon: Calculator },
   { key: 'contracts', url: 'https://contracts.devya-solutions.com', icon: FileSignature },
   { key: 'feedback', url: 'https://feedback.devya-solutions.com', icon: Star },
+  { key: 'xray', url: 'https://xray.devya.dev', icon: Activity },
   { key: 'mailer', url: 'https://mailer.devya-solutions.com', icon: Send },
   { key: 'admin', url: 'https://admin.devya-solutions.com', icon: Lock },
 ];
