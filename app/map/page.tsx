@@ -25,6 +25,8 @@ import {
   Send,
   Calculator,
   Activity,
+  FolderKanban,
+  LayoutGrid,
 } from 'lucide-react';
 import { getLocale } from '@/lib/i18n/server';
 import { getDictionary, t, type Dictionary } from '@/lib/i18n/dictionary';
@@ -33,8 +35,10 @@ export const dynamic = 'force-dynamic';
 
 type AppKey =
   | 'marketing'
+  | 'portfolio'
   | 'booking'
   | 'tasks'
+  | 'pm'
   | 'sales'
   | 'quote'
   | 'contracts'
@@ -43,19 +47,39 @@ type AppKey =
   | 'mailer'
   | 'admin';
 
+// Companion apps that belong to a parent app — regional editions of Quote,
+// the X-Ray internal brief, etc. `labelKey` resolves to apps.<parent>.<labelKey>.
+type RelatedApp = { labelKey: string; url: string };
+
 const APP_ORDER: Array<{
   key: AppKey;
   url: string;
   icon: React.ComponentType<{ className?: string }>;
+  related?: RelatedApp[];
 }> = [
   { key: 'marketing', url: 'https://www.devya.dev', icon: Globe },
-  { key: 'booking', url: 'https://booking.devya-solutions.com', icon: Calendar },
+  { key: 'portfolio', url: 'https://portfolio.devya.dev', icon: LayoutGrid },
+  { key: 'booking', url: 'https://booking.devya.dev', icon: Calendar },
   { key: 'tasks', url: 'https://tasks.devya-solutions.com', icon: CheckSquare },
+  { key: 'pm', url: 'https://pm.devya-solutions.com', icon: FolderKanban },
   { key: 'sales', url: 'https://sales.devya-solutions.com', icon: BarChart3 },
-  { key: 'quote', url: 'https://quote.devya-solutions.com', icon: Calculator },
+  {
+    key: 'quote',
+    url: 'https://quote.devya.dev',
+    icon: Calculator,
+    related: [
+      { labelKey: 'gulf', url: 'https://quote-gulf.devya.dev' },
+      { labelKey: 'global', url: 'https://quote-global.devya.dev' },
+    ],
+  },
   { key: 'contracts', url: 'https://contracts.devya-solutions.com', icon: FileSignature },
   { key: 'feedback', url: 'https://feedback.devya-solutions.com', icon: Star },
-  { key: 'xray', url: 'https://xray.devya.dev', icon: Activity },
+  {
+    key: 'xray',
+    url: 'https://xray.devya.dev',
+    icon: Activity,
+    related: [{ labelKey: 'brief', url: 'https://xray-brief.devya-solutions.com' }],
+  },
   { key: 'mailer', url: 'https://mailer.devya-solutions.com', icon: Send },
   { key: 'admin', url: 'https://admin.devya-solutions.com', icon: Lock },
 ];
@@ -171,40 +195,63 @@ export default async function FlowMapPage() {
             {APP_ORDER.map((a) => {
               const Icon = a.icon;
               return (
-                <a
-                  key={a.key}
-                  href={a.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="surface-strong p-6 group"
-                >
+                <div key={a.key} className="surface-strong p-6 group">
                   <div className="flex items-start gap-4">
                     <div className="rounded-xl bg-white/5 border border-white/10 p-3 shrink-0 group-hover:bg-white/10 transition">
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-3">
-                        <h3 className="text-xl font-semibold text-white">
-                          {t(dict, `apps.${a.key}.name`)}
-                        </h3>
-                        <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-white shrink-0" />
-                      </div>
-                      <p className="mt-1 text-sm text-zinc-400">
-                        {t(dict, `apps.${a.key}.role`)}
-                      </p>
-                      <p className="mt-3 text-base text-zinc-200">
-                        {t(dict, `apps.${a.key}.desc`)}
-                      </p>
-                      <p
-                        className="mt-3 text-xs text-zinc-500 font-mono break-all"
-                        dir="ltr"
-                        style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}
+                      <a
+                        href={a.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
                       >
-                        {a.url}
-                      </p>
+                        <div className="flex items-center justify-between gap-3">
+                          <h3 className="text-xl font-semibold text-white">
+                            {t(dict, `apps.${a.key}.name`)}
+                          </h3>
+                          <ExternalLink className="h-4 w-4 text-zinc-500 group-hover:text-white shrink-0" />
+                        </div>
+                        <p className="mt-1 text-sm text-zinc-400">
+                          {t(dict, `apps.${a.key}.role`)}
+                        </p>
+                        <p className="mt-3 text-base text-zinc-200">
+                          {t(dict, `apps.${a.key}.desc`)}
+                        </p>
+                        <p
+                          className="mt-3 text-xs text-zinc-500 font-mono break-all"
+                          dir="ltr"
+                          style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}
+                        >
+                          {a.url}
+                        </p>
+                      </a>
+                      {a.related && a.related.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-white/10">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">
+                            {t(dict, 'home.relatedAppsLabel')}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {a.related.map((rel) => (
+                              <a
+                                key={rel.labelKey}
+                                href={rel.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 border border-white/10 px-3 py-1.5 text-sm text-zinc-200 hover:bg-white/10 hover:text-white transition"
+                                title={rel.url}
+                              >
+                                <span>{t(dict, `apps.${a.key}.${rel.labelKey}`)}</span>
+                                <ExternalLink className="h-3 w-3 text-zinc-500" />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </a>
+                </div>
               );
             })}
           </div>

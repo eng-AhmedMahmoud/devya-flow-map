@@ -19,6 +19,7 @@
     "bigPictureTitle": "The big picture",
     "bigPictureIntro": "Four teams. Nine apps — marketing, booking, sales, quote, tasks, contracts, feedback, mailer, and the admin dashboard. One shared database keeps every screen on the same truth in real time (the mailer is the one standalone tool).",
     "appsTitle": "Each app, in one line",
+    "relatedAppsLabel": "Related apps",
     "rolesTitle": "Who does what",
     "journeyTitle": "A client journey, end to end",
     "journeyIntro": "From the very first website visit to a signed contract — one slide, no jargon. The diagram has two lanes: the",
@@ -90,7 +91,9 @@
     "quote": {
       "name": "Quote App",
       "desc": "Clients build a quote from services and see a live invoice, then convert it into a contract.",
-      "role": "Where quotes become contracts"
+      "role": "Where quotes become contracts",
+      "gulf": "Gulf edition",
+      "global": "Global edition"
     },
     "contracts": {
       "name": "Contracts App",
@@ -105,7 +108,8 @@
     "xray": {
       "name": "X-Ray",
       "desc": "Engineering-review consultancy. Clients run a self-assessment and get an interactive report — bilingual, with a paid deep-dive and a free snapshot.",
-      "role": "Where clients self-assess their engineering"
+      "role": "Where clients self-assess their engineering",
+      "brief": "Internal Brief"
     },
     "mailer": {
       "name": "Mailer App",
@@ -116,6 +120,16 @@
       "name": "Admin Dashboard",
       "desc": "Edit the marketing site, watch every booking + contract, and manage users, roles & access.",
       "role": "Where ops oversees everything"
+    },
+    "pm": {
+      "name": "PM App",
+      "desc": "Project-management workspace — plans, milestones, and a process-compliance view the delivery team works from.",
+      "role": "Where projects are planned & tracked"
+    },
+    "portfolio": {
+      "name": "Portfolio Site",
+      "desc": "A single-page showcase of Devya's delivered projects and capabilities for prospects.",
+      "role": "Where our work is showcased"
     }
   },
   "roles": {
