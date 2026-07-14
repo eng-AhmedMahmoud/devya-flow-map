@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface Props {
   chart: string;
@@ -411,7 +412,7 @@ export function Mermaid({ chart, id, fontSize = 18 }: Props) {
         </button>
       )}
 
-      {fs && (
+      {fs && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[100] flex flex-col bg-black/95 backdrop-blur-sm">
           <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
             <span className="text-sm font-medium text-white/60">
@@ -458,7 +459,8 @@ export function Mermaid({ chart, id, fontSize = 18 }: Props) {
               dangerouslySetInnerHTML={{ __html: svg }}
             />
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
