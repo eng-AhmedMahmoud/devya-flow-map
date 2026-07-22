@@ -128,7 +128,7 @@ export function DeploymentsDashboard({
             up
           </span>
           <span className="text-ink-500">·</span>
-          <span>updated {new Date(updatedAt).toLocaleTimeString()}</span>
+          <span>updated {new Date(updatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
         </div>
         <button
           onClick={refresh}
@@ -172,7 +172,7 @@ export function DeploymentsDashboard({
               {s.key === 'backend' && (s.version || s.timestamp) && (
                 <div className="text-xs text-ink-400">
                   {s.version && <span className="font-mono">v{s.version} </span>}
-                  {s.timestamp && <span>· {new Date(s.timestamp).toLocaleString()}</span>}
+                  {s.timestamp && <span>· {new Date(s.timestamp).toLocaleString(undefined, { hour12: true })}</span>}
                 </div>
               )}
 

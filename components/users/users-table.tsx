@@ -233,7 +233,7 @@ export function UsersTable({ users, total, filters, currentRole }: Props) {
                   <td className="px-4 py-3">
                     <div className="text-ink-100">{relativeTime(u.lastLoginAt)}</div>
                     {u.lastLoginAt && (
-                      <div className="text-xs text-ink-400">{new Date(u.lastLoginAt).toLocaleString()}</div>
+                      <div className="text-xs text-ink-400">{new Date(u.lastLoginAt).toLocaleString(undefined, { hour12: true })}</div>
                     )}
                   </td>
                   <td className="px-4 py-3 text-ink-300 text-xs">{new Date(u.createdAt).toLocaleDateString()}</td>

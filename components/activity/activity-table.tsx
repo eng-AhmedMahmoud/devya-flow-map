@@ -191,7 +191,7 @@ function ActivityRow({
           />
         </td>
         <td className="px-4 py-3 whitespace-nowrap">
-          <div className="text-ink-100 text-xs">{new Date(entry.createdAt).toLocaleString()}</div>
+          <div className="text-ink-100 text-xs">{new Date(entry.createdAt).toLocaleString(undefined, { hour12: true })}</div>
         </td>
         <td className="px-4 py-3">
           <div className="text-ink-100 text-xs truncate max-w-[200px]">{entry.actorEmail ?? 'system'}</div>
@@ -210,7 +210,7 @@ function ActivityRow({
               <span
                 className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
                 style={{ color: '#A3A3A3', background: '#A3A3A31A', border: '1px solid #A3A3A333' }}
-                title={entry.revertedAt ? `Reverted ${new Date(entry.revertedAt).toLocaleString()}` : 'Reverted'}
+                title={entry.revertedAt ? `Reverted ${new Date(entry.revertedAt).toLocaleString(undefined, { hour12: true })}` : 'Reverted'}
               >
                 <RotateCcw className="h-2.5 w-2.5" />
                 Reverted

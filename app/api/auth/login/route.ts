@@ -7,11 +7,12 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
+  const creds = await req.json().catch(() => ({}));
   const res = await fetch(`${UPSTREAM}/api/auth/login`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body,
+    // `app` drives the backend's per-app access gate for this dashboard.
+    body: JSON.stringify({ ...creds, app: 'system' }),
   });
   const text = await res.text();
   const out = new NextResponse(text, {

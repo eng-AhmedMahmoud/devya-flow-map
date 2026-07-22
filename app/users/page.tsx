@@ -11,7 +11,7 @@ import { usersApi, type UserRole, type UsersListResponse } from '@/lib/users-api
 export const dynamic = 'force-dynamic';
 
 const PAGE_SIZE = 20;
-const ROLE_SET = new Set(['SUPER_ADMIN', 'ADMIN', 'TEAM', 'SALES_REP', 'SALES_MANAGER']);
+const ROLE_SET = new Set(['SUPER_ADMIN', 'ADMIN', 'TEAM', 'SALES_REP', 'SALES_MANAGER', 'MARKETING', 'PR']);
 
 interface SearchParams {
   search?: string;

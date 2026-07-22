@@ -1,8 +1,8 @@
 import { apiFetch, ApiError } from './api';
 
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'TEAM' | 'SALES_REP' | 'SALES_MANAGER';
+export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'TEAM' | 'SALES_REP' | 'SALES_MANAGER' | 'MARKETING' | 'PR';
 
-export const USER_ROLES: UserRole[] = ['SUPER_ADMIN', 'ADMIN', 'TEAM', 'SALES_REP', 'SALES_MANAGER'];
+export const USER_ROLES: UserRole[] = ['SUPER_ADMIN', 'ADMIN', 'TEAM', 'SALES_REP', 'SALES_MANAGER', 'MARKETING', 'PR'];
 
 /** Org-wide delivery-team function — distinct from the access `role`. */
 export type JobRole = 'PRODUCT_OWNER' | 'SCRUM_MASTER' | 'TECH_LEAD' | 'DEVELOPER' | 'DESIGNER' | 'TESTER';
@@ -23,6 +23,8 @@ export interface ManagedUser {
   lockedUntil: string | null;
   mustChangePassword: boolean;
   avatarUrl: string | null;
+  /** App-key -> allowed. Missing key = allowed; `false` blocks that app. */
+  appAccess?: Record<string, boolean>;
   createdAt: string;
   updatedAt: string;
 }
@@ -109,6 +111,8 @@ export interface UpdateUserBody {
   mustChangePassword?: boolean;
   /** Empty string clears the current avatar. */
   avatarUrl?: string;
+  /** Full app-key -> allowed map (whole-map replace). */
+  appAccess?: Record<string, boolean>;
 }
 
 export interface ResetPasswordResponse {
@@ -125,6 +129,16 @@ export interface RoleMatrixEntry {
 
 export interface RolesMatrixResponse {
   roles: RoleMatrixEntry[];
+}
+
+export interface AppRegistryEntry {
+  key: string;
+  label: string;
+  url: string;
+}
+
+export interface AppsRegistryResponse {
+  apps: AppRegistryEntry[];
 }
 
 export const usersApi = {
@@ -156,6 +170,8 @@ export const usersApi = {
     apiFetch<void>(`/api/admin/users/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   rolesMatrix: (cookieHeader?: string) =>
     apiFetch<RolesMatrixResponse>('/api/admin/users/roles/matrix', { cookieHeader }),
+  appsRegistry: (cookieHeader?: string) =>
+    apiFetch<AppsRegistryResponse>('/api/admin/users/apps/registry', { cookieHeader }),
 };
 
 /** Backend errors are JSON `{ message }` (string or string[] for validation). */

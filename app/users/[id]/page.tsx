@@ -7,7 +7,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { UserDetail } from '@/components/users/user-detail';
 import { RoleBadge, UserStatusBadge } from '@/components/users/user-badges';
 import { ApiError } from '@/lib/api';
-import { usersApi, type UserDetailResponse } from '@/lib/users-api';
+import { usersApi, type AppRegistryEntry, type UserDetailResponse } from '@/lib/users-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,8 +16,14 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
   const cookieHeader = (await headers()).get('cookie') ?? '';
 
   let data: UserDetailResponse | null = null;
+  let apps: AppRegistryEntry[] = [];
   try {
-    data = await usersApi.get(id, cookieHeader);
+    const [detail, registry] = await Promise.all([
+      usersApi.get(id, cookieHeader),
+      usersApi.appsRegistry(cookieHeader),
+    ]);
+    data = detail;
+    apps = registry.apps;
   } catch (err) {
     if (err instanceof ApiError && err.status === 401) redirect(`/login?from=/users/${id}`);
     if (err instanceof ApiError && err.status === 404) notFound();
@@ -57,6 +63,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             key={`${data.user.id}-${data.user.updatedAt}`}
             user={data.user}
             recentEvents={data.recentEvents}
+            apps={apps}
           />
         </>
       )}

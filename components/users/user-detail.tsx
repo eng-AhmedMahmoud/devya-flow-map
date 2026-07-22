@@ -10,6 +10,7 @@ import {
   isUserLocked,
   usersApi,
   usersApiErrorMessage,
+  type AppRegistryEntry,
   type AuthEvent,
   type JobRole,
   type ManagedUser,
@@ -24,9 +25,10 @@ import { EventBadge, ROLE_META, relativeTime } from './user-badges';
 interface Props {
   user: ManagedUser;
   recentEvents: AuthEvent[];
+  apps: AppRegistryEntry[];
 }
 
-export function UserDetail({ user, recentEvents }: Props) {
+export function UserDetail({ user, recentEvents, apps }: Props) {
   const router = useRouter();
   const dialog = useDialog();
   const [saving, startSave] = useTransition();
@@ -39,6 +41,10 @@ export function UserDetail({ user, recentEvents }: Props) {
   const [isActive, setIsActive] = useState(user.isActive);
   const [mustChangePassword, setMustChangePassword] = useState(user.mustChangePassword);
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? '');
+  // Effective map: missing key = allowed, so every switcher starts from truth.
+  const [appAccess, setAppAccess] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(apps.map((a) => [a.key, user.appAccess?.[a.key] !== false])),
+  );
 
   const [actionError, setActionError] = useState<string | null>(null);
   const [resetBusy, setResetBusy] = useState(false);
@@ -47,6 +53,7 @@ export function UserDetail({ user, recentEvents }: Props) {
   const [copied, setCopied] = useState(false);
 
   const locked = isUserLocked(user);
+  const appAccessDirty = apps.some((a) => appAccess[a.key] !== (user.appAccess?.[a.key] !== false));
   const dirty =
     name.trim() !== user.name ||
     whatsapp.trim() !== (user.whatsapp ?? '') ||
@@ -54,7 +61,8 @@ export function UserDetail({ user, recentEvents }: Props) {
     jobRole !== user.jobRole ||
     isActive !== user.isActive ||
     mustChangePassword !== user.mustChangePassword ||
-    avatarUrl.trim() !== (user.avatarUrl ?? '');
+    avatarUrl.trim() !== (user.avatarUrl ?? '') ||
+    appAccessDirty;
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -88,6 +96,7 @@ export function UserDetail({ user, recentEvents }: Props) {
     if (isActive !== user.isActive) body.isActive = isActive;
     if (mustChangePassword !== user.mustChangePassword) body.mustChangePassword = mustChangePassword;
     if (avatarUrl.trim() !== (user.avatarUrl ?? '')) body.avatarUrl = avatarUrl.trim();
+    if (appAccessDirty) body.appAccess = appAccess;
 
     startSave(async () => {
       try {
@@ -191,6 +200,26 @@ export function UserDetail({ user, recentEvents }: Props) {
               />
             </div>
           </div>
+          {apps.length > 0 && (
+            <div className="space-y-3 rounded-md border border-white/10 bg-white/[0.02] p-4">
+              <div>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-300">App access</h4>
+                <p className="text-[11px] text-ink-500 mt-0.5">
+                  Switch an app off to block this user from signing in there — independent of role.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {apps.map((app) => (
+                  <SwitchToggle
+                    key={app.key}
+                    label={app.label}
+                    value={appAccess[app.key] ?? true}
+                    onChange={(v: boolean) => setAppAccess((prev) => ({ ...prev, [app.key]: v }))}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           <MediaPicker
             label="Profile picture"
             value={avatarUrl}
@@ -277,20 +306,20 @@ export function UserDetail({ user, recentEvents }: Props) {
 
         <div className="surface p-5 space-y-2 text-xs">
           <h3 className="text-sm font-semibold text-white mb-2">Account</h3>
-          <MetaRow label="Last login" value={user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : 'Never'} />
+          <MetaRow label="Last login" value={user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString(undefined, { hour12: true }) : 'Never'} />
           <MetaRow
             label="Password updated"
-            value={user.passwordUpdatedAt ? new Date(user.passwordUpdatedAt).toLocaleString() : 'Never'}
+            value={user.passwordUpdatedAt ? new Date(user.passwordUpdatedAt).toLocaleString(undefined, { hour12: true }) : 'Never'}
           />
           <MetaRow label="Failed logins" value={String(user.failedLoginCount)} />
           {user.lockedUntil ? (
             <MetaRow
               label="Locked until"
-              value={`${new Date(user.lockedUntil).toLocaleString()}${locked ? ` (${relativeTime(user.lockedUntil)})` : ''}`}
+              value={`${new Date(user.lockedUntil).toLocaleString(undefined, { hour12: true })}${locked ? ` (${relativeTime(user.lockedUntil)})` : ''}`}
             />
           ) : null}
-          <MetaRow label="Created" value={new Date(user.createdAt).toLocaleString()} />
-          <MetaRow label="Updated" value={new Date(user.updatedAt).toLocaleString()} />
+          <MetaRow label="Created" value={new Date(user.createdAt).toLocaleString(undefined, { hour12: true })} />
+          <MetaRow label="Updated" value={new Date(user.updatedAt).toLocaleString(undefined, { hour12: true })} />
         </div>
       </aside>
     </div>
@@ -315,8 +344,8 @@ function EventTimeline({ events }: { events: AuthEvent[] }) {
           <div className="absolute -left-1.5 mt-1.5 h-2.5 w-2.5 rounded-full bg-ink-500" />
           <div className="flex flex-wrap items-center gap-2">
             <EventBadge type={e.type} />
-            <span className="text-[10px] text-ink-500" title={new Date(e.createdAt).toLocaleString()}>
-              {relativeTime(e.createdAt)} · {new Date(e.createdAt).toLocaleString()}
+            <span className="text-[10px] text-ink-500" title={new Date(e.createdAt).toLocaleString(undefined, { hour12: true })}>
+              {relativeTime(e.createdAt)} · {new Date(e.createdAt).toLocaleString(undefined, { hour12: true })}
             </span>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-3 text-[11px] text-ink-500">

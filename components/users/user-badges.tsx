@@ -6,6 +6,8 @@ export const ROLE_META: Record<UserRole, { label: string; color: string }> = {
   TEAM: { label: 'Team', color: '#A3A3A3' },
   SALES_REP: { label: 'Sales rep', color: '#F59E0B' },
   SALES_MANAGER: { label: 'Sales manager', color: '#10B981' },
+  MARKETING: { label: 'Marketing', color: '#EC4899' },
+  PR: { label: 'PR', color: '#8B5CF6' },
 };
 
 /** Delivery-team function — neutral tone so it reads secondary to the access role. */
