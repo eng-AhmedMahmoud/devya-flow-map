@@ -25,6 +25,7 @@ flowchart LR
     direction TB
     SAL_REVIEW[Reviews booking<br/>requests]
     SAL_LEADS[Works leads in<br/>Sales pipeline]
+    SAL_FIELD[Visits cafés &amp; restaurants<br/>on a company iPad]
     SAL_CONTRACT[Drafts &amp; sends<br/>contract]
   end
 
@@ -48,6 +49,7 @@ flowchart LR
     SITE["🌐 Marketing site<br/>devya.dev"]
     BOOK["📅 Booking app<br/>booking.devya-solutions.com"]
     SALES_APP["💼 Sales app<br/>sales.devya-solutions.com"]
+    OUTDOOR["🧭 Outdoor app<br/>outdoor.devya-solutions.com"]
     QUOTE["🧮 Quote app<br/>quote → contract"]
     TASKS["✅ Tasks app<br/>tasks.devya-solutions.com"]
     CON["📝 Contracts app<br/>contracts.devya-solutions.com"]
@@ -67,6 +69,7 @@ flowchart LR
   CL_XRAY ==> XRAY
   SAL_REVIEW ==> BOOK
   SAL_LEADS ==> SALES_APP
+  SAL_FIELD ==> OUTDOOR
   SAL_CONTRACT ==> CON
   SALES_APP ==> BOOK
   SALES_APP ==> CON
@@ -85,6 +88,7 @@ flowchart LR
   SITE -. content -.-> DATA
   BOOK <==> DATA
   SALES_APP <==> DATA
+  OUTDOOR <==> DATA
   TASKS <==> DATA
   CON <==> DATA
   FEED <==> DATA
@@ -99,8 +103,8 @@ flowchart LR
   classDef mail fill:#231a0a,stroke:#fbbf24,color:#fde68a,stroke-width:2px,rx:12,ry:12
   classDef store fill:#1a0f1f,stroke:#a855f7,color:#e9d5ff,stroke-width:2px
 
-  class VISITOR,CL_BOOK,CL_QUOTE,CL_PORTAL,CL_REVIEW,CL_XRAY,SAL_REVIEW,SAL_LEADS,SAL_CONTRACT,DEL_MEET,DEL_TASKS,DEL_FEED,OPS_CMS,OPS_BOARD,OPS_USERS,OPS_MAIL step
-  class SITE,BOOK,SALES_APP,QUOTE,TASKS,CON,FEED,XRAY,DASH,RADAR app
+  class VISITOR,CL_BOOK,CL_QUOTE,CL_PORTAL,CL_REVIEW,CL_XRAY,SAL_REVIEW,SAL_LEADS,SAL_FIELD,SAL_CONTRACT,DEL_MEET,DEL_TASKS,DEL_FEED,OPS_CMS,OPS_BOARD,OPS_USERS,OPS_MAIL step
+  class SITE,BOOK,SALES_APP,OUTDOOR,QUOTE,TASKS,CON,FEED,XRAY,DASH,RADAR app
   class MAILER mail
   class DATA store
 

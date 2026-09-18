@@ -27,6 +27,7 @@ import {
   Activity,
   FolderKanban,
   LayoutGrid,
+  MapPin,
 } from 'lucide-react';
 import { getLocale } from '@/lib/i18n/server';
 import { getDictionary, t, type Dictionary } from '@/lib/i18n/dictionary';
@@ -40,6 +41,7 @@ type AppKey =
   | 'tasks'
   | 'pm'
   | 'sales'
+  | 'outdoor'
   | 'quote'
   | 'contracts'
   | 'feedback'
@@ -63,6 +65,7 @@ const APP_ORDER: Array<{
   { key: 'tasks', url: 'https://tasks.devya-solutions.com', icon: CheckSquare },
   { key: 'pm', url: 'https://pm.devya-solutions.com', icon: FolderKanban },
   { key: 'sales', url: 'https://sales.devya-solutions.com', icon: BarChart3 },
+  { key: 'outdoor', url: 'https://outdoor.devya-solutions.com', icon: MapPin },
   {
     key: 'quote',
     url: 'https://quote.devya.dev',

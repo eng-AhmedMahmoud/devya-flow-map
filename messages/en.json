@@ -88,6 +88,11 @@
       "desc": "Arabic-first pipeline. Reps run leads, log activity, schedule meetings, close deals.",
       "role": "Where sales reps work leads"
     },
+    "outdoor": {
+      "name": "Outdoor App",
+      "desc": "Field sales for DevyaPOS. A rep starts a shift on a company iPad, checks into cafés and restaurants, and logs each visit, while supervisors watch a live map with tamper-resistant location. Its clients are separate from the Sales app.",
+      "role": "Where field reps sell on the ground"
+    },
     "quote": {
       "name": "Quote App",
       "desc": "Clients build a quote from services and see a live invoice, then convert it into a contract.",
